@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Main from '@/views/Index'
+import Main from '@/layouts/AppLayout'
 
 export default {
   name: "App",
