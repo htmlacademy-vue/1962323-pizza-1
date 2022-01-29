@@ -1,8 +1,6 @@
 <template>
     <label class="input">
-        <span>
-             <slot/>
-        </span>
+        <slot/>
         <input type="text" :name="name" :placeholder="placeholder">
     </label>
 </template>

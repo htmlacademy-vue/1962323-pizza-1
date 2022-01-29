@@ -5,7 +5,7 @@
             <div class="sheet__content dough">
                 <RadioButton  
                     v-for="dough of fulldata.dough" 
-                    :label_class="`dough__input dough__input--${get_class(classes.dough, dough.id)}`" 
+                    :label_class="`dough__input dough__input--${get_class('dough', dough.id)}`" 
                     :input_class="'visually-hidden'"
                     :name="'dought'" 
                     :key="dough.id" 
@@ -24,7 +24,7 @@ export default {
       components:{
         RadioButton
     },
-    props:["fulldata", "classes", "get_class"]
+    props:["fulldata", "get_class"]
 }
 </script>
 

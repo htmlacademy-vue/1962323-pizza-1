@@ -20,7 +20,7 @@
                 <p>Начинка:</p>
                 <ul class="ingredients__list">
                 <li class="ingredients__item" v-for="ingredient of fulldata.ingredients" :key="ingredient.id">
-                    <span :class="`filling filling--${get_class(classes.ingredients, ingredient.id)}`">{{ingredient.name}}</span>
+                    <span :class="`filling filling--${get_class('ingredients', ingredient.id)}`">{{ingredient.name}}</span>
                     <ItemCounter :ingredient="ingredient"/>
                 </li>
                 </ul>
@@ -38,7 +38,7 @@ export default {
         ItemCounter,
         RadioButton
     },
-    props:["fulldata", "classes", "get_class"]
+    props:["fulldata", "get_class"]
 }
 </script>
 

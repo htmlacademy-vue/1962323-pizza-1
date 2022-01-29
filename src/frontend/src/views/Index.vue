@@ -7,17 +7,14 @@
           <DoughSelector 
             :fulldata="fulldata" 
             :get_class="get_class" 
-            :classes="classes"
           />
           <SizeSelector 
             :fulldata="fulldata" 
             :get_class="get_class" 
-            :classes="classes"
           />
           <IngredientsSelector 
             :fulldata="fulldata" 
             :get_class="get_class" 
-            :classes="classes"
           />
           <PizzaView/>
          
@@ -75,8 +72,8 @@ export default {
     }
   },
   methods:{
-    get_class(classes, id) {
-      return classes.find(elem=>elem.id == id).code;
+    get_class(class_key, id) {
+      return this.classes[class_key].find(elem=>elem.id == id).code;
     }
   }
 };
