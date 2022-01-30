@@ -6,12 +6,13 @@
             <div class="ingredients__sauce">
                 <p>Основной соус:</p>
                 <RadioButton  
-                    v-for="sauce of fulldata.sauces" 
-                    :label_class="'radio ingredients__input'" 
+                    v-for="sauce of fulldata.sauces"
+                    :label_class="'radio ingredients__input'"
                     :input_class="'visually-hidden'"
-                    :name="'sauce'" 
-                    :key="sauce.id" 
-                    :value="sauce" 
+                    :name="'sauce'"
+                    :key="sauce.id"
+                    :value="sauce.id"
+                    @input="SouceHandler"
                     >
                     <span>{{sauce.name}}</span>
                 </RadioButton>
@@ -21,7 +22,10 @@
                 <ul class="ingredients__list">
                 <li class="ingredients__item" v-for="ingredient of fulldata.ingredients" :key="ingredient.id">
                     <span :class="`filling filling--${get_class('ingredients', ingredient.id)}`">{{ingredient.name}}</span>
-                    <ItemCounter :ingredient="ingredient"/>
+                    <ItemCounter 
+                        :ingredient="ingredient"
+                        @handleCounter="IngredientsCounterHandler"
+                    />
                 </li>
                 </ul>
             </div>
@@ -38,7 +42,7 @@ export default {
         ItemCounter,
         RadioButton
     },
-    props:["fulldata", "get_class"]
+    props:["fulldata", "get_class","SouceHandler", "IngredientsCounterHandler"]
 }
 </script>
 

@@ -3,6 +3,7 @@
         <TextInput
             :name="'pizza_name'"
             :placeholder="'Введите название пиццы'"
+            @input="TextHandler"
         />
         <div class="content__constructor">
             <div class="pizza pizza--foundation--big-tomato">
@@ -14,7 +15,7 @@
             </div>
         </div>
         <div class="content__result">
-            <p>Итого: <BuilderPriceCounter/></p>
+            <p>Итого: <BuilderPriceCounter /></p>
             <button type="button" class="button" disabled>Готовьте!</button>
         </div>
     </div>
@@ -24,6 +25,7 @@
 import BuilderPriceCounter from '@/modules/builder/components/BuilderPriceCounter'
 import TextInput from '@/common/components/TextInput'
 export default {
+    props:["TextHandler"],
     components:{
         BuilderPriceCounter,
         TextInput

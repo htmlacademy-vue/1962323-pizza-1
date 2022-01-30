@@ -9,7 +9,8 @@
                     :input_class="'visually-hidden'"
                     :name="'diameter'" 
                     :key="size.id" 
-                    :value="size" 
+                    :value="size.id" 
+                    @input="handler"
                     >
                     <span>{{size.name}}</span>
                 </RadioButton>
@@ -23,7 +24,7 @@ export default {
      components:{
         RadioButton
     },
-    props:["fulldata", "get_class"]
+    props:["fulldata", "get_class", "handler"]
 }
 </script>
 

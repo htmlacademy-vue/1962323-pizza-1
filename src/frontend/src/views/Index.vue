@@ -6,17 +6,23 @@
 
           <DoughSelector 
             :fulldata="fulldata" 
-            :get_class="get_class" 
+            :get_class="getClass"
+            :handler="DoughHandler"
           />
           <SizeSelector 
             :fulldata="fulldata" 
-            :get_class="get_class" 
+            :get_class="getClass" 
+            :handler="SizeHandler"
           />
           <IngredientsSelector 
             :fulldata="fulldata" 
-            :get_class="get_class" 
+            :get_class="getClass"
+            :SouceHandler="SouceHandler"
+            :IngredientsCounterHandler="IngredientsCounterHandler"
           />
-          <PizzaView/>
+          <PizzaView 
+            :TextHandler="TextHandler"
+          />
          
         </div>
       </form>
@@ -72,8 +78,24 @@ export default {
     }
   },
   methods:{
-    get_class(class_key, id) {
+    getClass(class_key, id) {
       return this.classes[class_key].find(elem=>elem.id == id).code;
+    },
+    DoughHandler(value){
+      console.log(value)
+    },
+    SizeHandler(value){
+      console.log(value)
+    },
+    SouceHandler(value){
+      console.log(value)
+    },
+    TextHandler(value){
+      console.log(value)
+    },
+    IngredientsCounterHandler(value, id){
+       console.log("value - ", value)
+       console.log("counter_name - ", id)
     }
   }
 };

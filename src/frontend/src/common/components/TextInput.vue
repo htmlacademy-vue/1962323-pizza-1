@@ -1,7 +1,7 @@
 <template>
     <label class="input">
         <slot/>
-        <input type="text" :name="name" :placeholder="placeholder">
+        <input type="text" :name="name" :placeholder="placeholder" @input="$emit('input', $event.target.value)">
     </label>
 </template>
 <script>
