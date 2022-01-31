@@ -25,7 +25,21 @@ export default {
       components:{
         RadioButton
     },
-    props:["fulldata", "get_class", "handler"]
+    props:{
+        fulldata:{
+            type:Object,
+            required: true
+        },
+        get_class: {
+            type: Function,
+            required: true
+        }
+    },
+    methods:{
+        handler(value){
+            this.$emit("input", value)
+        }
+    }
 }
 </script>
 

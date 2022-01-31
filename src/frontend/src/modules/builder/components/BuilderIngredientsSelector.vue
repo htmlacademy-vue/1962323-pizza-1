@@ -24,7 +24,7 @@
                     <span :class="`filling filling--${get_class('ingredients', ingredient.id)}`">{{ingredient.name}}</span>
                     <ItemCounter 
                         :ingredient="ingredient"
-                        @handleCounter="IngredientsCounterHandler"
+                        @IngredientsCounterHandler="IngredientsCounterHandler"
                     />
                 </li>
                 </ul>
@@ -42,7 +42,24 @@ export default {
         ItemCounter,
         RadioButton
     },
-    props:["fulldata", "get_class","SouceHandler", "IngredientsCounterHandler"]
+    props:{
+        fulldata:{
+            type:Object,
+            required: true
+        },
+        get_class: {
+            type: Function,
+            required: true
+        }
+    },
+    methods:{
+        SouceHandler(value){
+            this.$emit("SouceHandler", value)
+        },
+        IngredientsCounterHandler(value, id){
+            this.$emit("IngredientsCounterHandler", value, id)
+        }
+    }
 }
 </script>
 

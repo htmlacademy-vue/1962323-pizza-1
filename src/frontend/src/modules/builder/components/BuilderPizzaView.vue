@@ -25,11 +25,15 @@
 import BuilderPriceCounter from '@/modules/builder/components/BuilderPriceCounter'
 import TextInput from '@/common/components/TextInput'
 export default {
-    props:["TextHandler"],
     components:{
         BuilderPriceCounter,
         TextInput
     },
+    methods:{
+        TextHandler(value){
+            this.$emit("input", value)
+        },
+    }
 }
 </script>
 

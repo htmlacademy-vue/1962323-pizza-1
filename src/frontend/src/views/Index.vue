@@ -7,21 +7,21 @@
           <DoughSelector 
             :fulldata="fulldata" 
             :get_class="getClass"
-            :handler="DoughHandler"
+            @input="DoughHandler" 
           />
           <SizeSelector 
             :fulldata="fulldata" 
             :get_class="getClass" 
-            :handler="SizeHandler"
+            @input="SizeHandler"
           />
           <IngredientsSelector 
             :fulldata="fulldata" 
             :get_class="getClass"
-            :SouceHandler="SouceHandler"
-            :IngredientsCounterHandler="IngredientsCounterHandler"
+            @SouceHandler="SouceHandler"
+            @IngredientsCounterHandler="IngredientsCounterHandler"
           />
           <PizzaView 
-            :TextHandler="TextHandler"
+            @input="TextHandler"
           />
          
         </div>

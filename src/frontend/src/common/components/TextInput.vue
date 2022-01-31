@@ -6,7 +6,16 @@
 </template>
 <script>
 export default {
-   props:["name", "placeholder"]
+    props:{
+        name:{
+            type: String,
+            required: true
+        },
+        placeholder:{
+            type: String,
+            default: ""
+        }
+    }
 }
 </script>
 
