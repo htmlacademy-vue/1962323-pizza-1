@@ -22,6 +22,7 @@
           />
           <PizzaView 
             @input="TextHandler"
+            :total_prise="total_price"
           />
          
         </div>
@@ -47,6 +48,8 @@ export default {
   data(){
     return {
       fulldata,
+      prise_data: {},
+      total_price: 0,
       classes:{
         ingredients: [
           { "id": 1, code:"mushrooms"},
@@ -82,22 +85,28 @@ export default {
       return this.classes[class_key].find(elem=>elem.id == id).code;
     },
     DoughHandler(value){
+      this.prise_data["dough"] = this.fulldata.dough.find(elem => elem.id == value).price
+      this.calculate_total_prise()
+    },
+    SouceHandler(value){
+      this.prise_data["sauces"] = this.fulldata.sauces.find(elem => elem.id == value).price
+      this.calculate_total_prise()
+    },
+    IngredientsCounterHandler(count, id){
+      this.prise_data[`ingredient_${id}}`] = this.fulldata.ingredients.find(elem => elem.id == id).price * count
+      this.calculate_total_prise()
+    },
+    calculate_total_prise(){
+      this.total_price = Object.values(this.prise_data).reduce((current, key) => current + key, 0);
+    },
+    TextHandler(value){
       console.log(value)
     },
     SizeHandler(value){
       console.log(value)
     },
-    SouceHandler(value){
-      console.log(value)
-    },
-    TextHandler(value){
-      console.log(value)
-    },
-    IngredientsCounterHandler(value, id){
-       console.log("value - ", value)
-       console.log("counter_name - ", id)
-    }
   }
+  
 };
 </script>
 

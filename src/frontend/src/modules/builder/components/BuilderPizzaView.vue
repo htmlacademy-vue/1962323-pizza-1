@@ -15,18 +15,23 @@
             </div>
         </div>
         <div class="content__result">
-            <p>Итого: <BuilderPriceCounter /></p>
+            <p>Итого: <span>{{total_prise}} ₽</span></p>
             <button type="button" class="button" disabled>Готовьте!</button>
         </div>
     </div>
 </template>
 
 <script>
-import BuilderPriceCounter from '@/modules/builder/components/BuilderPriceCounter'
+//import BuilderPriceCounter from '@/modules/builder/components/BuilderPriceCounter'
 import TextInput from '@/common/components/TextInput'
 export default {
+    props:{
+        total_prise:{
+            type:Number,
+            required:true
+        }
+    },
     components:{
-        BuilderPriceCounter,
         TextInput
     },
     methods:{
