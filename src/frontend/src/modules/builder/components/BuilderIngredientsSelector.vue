@@ -20,13 +20,16 @@
             <div class="ingredients__filling">
                 <p>Начинка:</p>
                 <ul class="ingredients__list">
-                <li class="ingredients__item" v-for="ingredient of fulldata.ingredients" :key="ingredient.id">
-                    <span :class="`filling filling--${get_class('ingredients', ingredient.id)}`">{{ingredient.name}}</span>
-                    <ItemCounter 
-                        :ingredient="ingredient"
-                        @IngredientsCounterHandler="IngredientsCounterHandler"
-                    />
-                </li>
+                    <li class="ingredients__item" v-for="ingredient of fulldata.ingredients" :key="ingredient.id">
+                        <AppDrag :transferData="ingredient">
+                            <span :class="`filling filling--${get_class('ingredients', ingredient.id)}`">{{ingredient.name}}</span>
+                        </AppDrag>
+                        <ItemCounter 
+                            :ingredient="ingredient"
+                            :ingredients_counter="ingredients_counter"
+                            @IngredientsCounterHandler="IngredientsCounterHandler"
+                        />
+                    </li>
                 </ul>
             </div>
             </div>
@@ -37,14 +40,20 @@
 <script>
 import ItemCounter from '@/common/components/ItemCounter'
 import RadioButton from '@/common/components/RadioButton'
+import AppDrag from '@/common/components/AppDrag'
 export default {
     components:{
         ItemCounter,
-        RadioButton
+        RadioButton,
+        AppDrag
     },
     props:{
         fulldata:{
             type:Object,
+            required: true
+        },
+        ingredients_counter:{
+             type:Object,
             required: true
         },
         get_class: {

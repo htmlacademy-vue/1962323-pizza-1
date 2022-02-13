@@ -17,12 +17,15 @@
           <IngredientsSelector 
             :fulldata="fulldata" 
             :get_class="getClass"
+            :ingredients_counter="ingredients_counter"
             @SouceHandler="SouceHandler"
             @IngredientsCounterHandler="IngredientsCounterHandler"
           />
           <PizzaView 
             @input="TextHandler"
             :total_prise="total_price"
+            :ingredients_counter="ingredients_counter"
+            @IngredientsCounterHandler="IngredientsCounterHandler"
           />
          
         </div>
@@ -50,6 +53,10 @@ export default {
       fulldata,
       prise_data: {},
       total_price: 0,
+      ingredients_counter:{
+          min: 0,
+          max: 3
+      },
       classes:{
         ingredients: [
           { "id": 1, code:"mushrooms"},
@@ -80,30 +87,37 @@ export default {
       }
     }
   },
+
   methods:{
     getClass(class_key, id) {
-      return this.classes[class_key].find(elem=>elem.id == id).code;
+        return this.classes[class_key].find(elem=>elem.id == id).code;
     },
     DoughHandler(value){
-      this.prise_data["dough"] = this.fulldata.dough.find(elem => elem.id == value).price
-      this.calculate_total_prise()
+        this.prise_data["dough"] = this.fulldata.dough.find(elem => elem.id == value).price
+        this.calculateTotalPrise()
     },
     SouceHandler(value){
-      this.prise_data["sauces"] = this.fulldata.sauces.find(elem => elem.id == value).price
-      this.calculate_total_prise()
+        this.prise_data["sauces"] = this.fulldata.sauces.find(elem => elem.id == value).price
+        this.calculateTotalPrise()
     },
     IngredientsCounterHandler(count, id){
-      this.prise_data[`ingredient_${id}}`] = this.fulldata.ingredients.find(elem => elem.id == id).price * count
-      this.calculate_total_prise()
+        let ingredients = [...this.fulldata.ingredients]
+        let ingredient = ingredients.find(elem => elem.id == id) 
+        const findIndex = element => element.id == ingredient.id;
+        let index = ingredients.findIndex(findIndex)
+        ingredients[index] =  {...ingredient, value: count}
+        this.fulldata.ingredients = ingredients
+        this.prise_data[`ingridient_${id}`] = this.fulldata.ingredients.find(elem => elem.id == id).price * count
+        this.calculateTotalPrise()
     },
-    calculate_total_prise(){
-      this.total_price = Object.values(this.prise_data).reduce((current, key) => current + key, 0);
+    calculateTotalPrise(){
+        this.total_price = Object.values(this.prise_data).reduce((current, key) => current + key, 0);
     },
     TextHandler(value){
-      console.log(value)
+        console.log(value)
     },
     SizeHandler(value){
-      console.log(value)
+        console.log(value)
     },
   }
   
