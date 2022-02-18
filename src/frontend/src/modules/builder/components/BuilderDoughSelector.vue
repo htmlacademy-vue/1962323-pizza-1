@@ -4,10 +4,10 @@
             <h2 class="title title--small sheet__title">Выберите тесто</h2>
             <div class="sheet__content dough">
                 <RadioButton  
-                    v-for="dough of fulldata.dough" 
-                    :label_class="`dough__input dough__input--${get_class('dough', dough.id)}`" 
-                    :input_class="'visually-hidden'"
-                    :name="'dought'" 
+                    v-for="dough of doughs" 
+                    :label-class="`dough__input dough__input--${dough.class}`" 
+                    input-class="visually-hidden"
+                    name="dought" 
                     :key="dough.id"
                     :value="dough.id"
                     @input="handler"
@@ -22,22 +22,18 @@
 <script>
 import RadioButton from '@/common/components/RadioButton'
 export default {
-      components:{
+    components:{
         RadioButton
     },
     props:{
-        fulldata:{
-            type:Object,
-            required: true
-        },
-        get_class: {
-            type: Function,
+        doughs:{
+            type: Array,
             required: true
         }
     },
     methods:{
         handler(value){
-            this.$emit("input", value)
+            this.$emit("DoughHandler", value)
         }
     }
 }

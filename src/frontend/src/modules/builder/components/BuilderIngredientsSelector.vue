@@ -6,10 +6,10 @@
             <div class="ingredients__sauce">
                 <p>Основной соус:</p>
                 <RadioButton  
-                    v-for="sauce of fulldata.sauces"
-                    :label_class="'radio ingredients__input'"
-                    :input_class="'visually-hidden'"
-                    :name="'sauce'"
+                    v-for="sauce of sauces"
+                    label-class="radio ingredients__input"
+                    input-class="visually-hidden"
+                    name="sauce"
                     :key="sauce.id"
                     :value="sauce.id"
                     @input="SouceHandler"
@@ -20,13 +20,13 @@
             <div class="ingredients__filling">
                 <p>Начинка:</p>
                 <ul class="ingredients__list">
-                    <li class="ingredients__item" v-for="ingredient of fulldata.ingredients" :key="ingredient.id">
-                        <AppDrag :transferData="ingredient">
-                            <span :class="`filling filling--${get_class('ingredients', ingredient.id)}`">{{ingredient.name}}</span>
+                    <li class="ingredients__item" v-for="ingredient of ingredients" :key="ingredient.id">
+                        <AppDrag :transfer-data="ingredient" :ingredients-counter="ingredientsCounter">
+                            <span :class="`filling filling--${ingredient.class}`">{{ingredient.name}}</span>
                         </AppDrag>
                         <ItemCounter 
                             :ingredient="ingredient"
-                            :ingredients_counter="ingredients_counter"
+                            :ingredients-counter="ingredientsCounter"
                             @IngredientsCounterHandler="IngredientsCounterHandler"
                         />
                     </li>
@@ -48,16 +48,16 @@ export default {
         AppDrag
     },
     props:{
-        fulldata:{
-            type:Object,
+        ingredients:{
+            type: Array,
             required: true
         },
-        ingredients_counter:{
+        sauces:{
+            type: Array,
+            required: true
+        },
+        ingredientsCounter:{
              type:Object,
-            required: true
-        },
-        get_class: {
-            type: Function,
             required: true
         }
     },

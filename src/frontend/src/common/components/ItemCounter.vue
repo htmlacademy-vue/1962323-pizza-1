@@ -1,10 +1,10 @@
 <template>
     <div class="counter counter--orange ingredients__counter">
-        <button type="button" class="counter__button counter__button--minus"  @click="changeCounter(-1, inputValue)" :disabled="inputValue == ingredients_counter.min">
+        <button type="button" class="counter__button counter__button--minus"  @click="changeCounter(-1, inputValue)" :disabled="inputValue == ingredientsCounter.min">
             <span class="visually-hidden">Меньше</span>
         </button>
         <input type="text" :name="`counter-${ingredient.id}`" class="counter__input" :value="inputValue" disabled>
-        <button type="button" class="counter__button counter__button--plus" @click="changeCounter(1, inputValue)" :disabled="inputValue == ingredients_counter.max">
+        <button type="button" class="counter__button counter__button--plus" @click="changeCounter(1, inputValue)" :disabled="inputValue == ingredientsCounter.max">
             <span class="visually-hidden">Больше</span>
         </button>
     </div>
@@ -17,14 +17,14 @@ export default {
            type: Object,
            required: true
        },
-       ingredients_counter:{
+       ingredientsCounter:{
            type: Object,
            required: true
        }
    },
    computed:{
         inputValue(){
-           return this.ingredient.value ? this.ingredient.value : 0
+           return this.ingredient.count ? this.ingredient.count : 0
         }
    },
    methods:{
@@ -34,8 +34,8 @@ export default {
             if (result == -1) {
                count = 0;
             }
-            if (result > this.ingredients_counter.max) {
-                count = this.ingredients_counter.max
+            if (result > this.ingredientsCounter.max) {
+                count = this.ingredientsCounter.max
             }
            this.$emit('IngredientsCounterHandler', count, this.ingredient.id)
        }

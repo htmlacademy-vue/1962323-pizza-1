@@ -3,31 +3,30 @@
       <form action="#" method="post">
         <div class="content__wrapper">
           <h1 class="title title--big">Конструктор пиццы</h1>
-
           <DoughSelector 
-            :fulldata="fulldata" 
-            :get_class="getClass"
-            @input="DoughHandler" 
+            :doughs="dough" 
+            @DoughHandler="DoughHandler" 
           />
           <SizeSelector 
-            :fulldata="fulldata" 
-            :get_class="getClass" 
-            @input="SizeHandler"
+            :sizes="sizes" 
+            @SizeHandler="SizeHandler"
           />
           <IngredientsSelector 
-            :fulldata="fulldata" 
-            :get_class="getClass"
-            :ingredients_counter="ingredients_counter"
+            :ingredients="ingredients"
+            :sauces="sauces"
+            :ingredients-counter="ingredientsCounter"
             @SouceHandler="SouceHandler"
             @IngredientsCounterHandler="IngredientsCounterHandler"
           />
           <PizzaView 
-            @input="TextHandler"
-            :total_prise="total_price"
-            :ingredients_counter="ingredients_counter"
+            :total-prise="totalPrice"
+            :ingredients-counter="ingredientsCounter"
+            :ingredients="ingredients"
+            :selected-dough="selectedDough"
+            :selected-sauce="selectedSauce"
+            @TextHandler="TextHandler"
             @IngredientsCounterHandler="IngredientsCounterHandler"
           />
-         
         </div>
       </form>
     </main>
@@ -51,76 +50,99 @@ export default {
   data(){
     return {
       fulldata,
-      prise_data: {},
-      total_price: 0,
-      ingredients_counter:{
+      priseData: {},
+      priseMultiplier: 1,
+      selectedDough: "big",
+      selectedSauce: "creamy",
+      ingredientsCounter:{
           min: 0,
           max: 3
       },
       classes:{
-        ingredients: [
-          { "id": 1, code:"mushrooms"},
-          { "id": 2, code:"cheddar"},
-          { "id": 3, code:"salami"},
-          { "id": 4, code:"ham"},
-          { "id": 5, code:"ananas"},
-          { "id": 6, code:"bacon"},
-          { "id": 7, code:"onion"},
-          { "id": 8, code:"chile"},
-          { "id": 9, code:"jalapeno"},
-          { "id": 10, code:"olives"},
-          { "id": 11, code:"tomatoes"},
-          { "id": 12, code:"salmon"},
-          { "id": 13, code:"mozzarella"},
-          { "id": 14, code:"parmesan"},
-          { "id": 15, code:"blue_cheese"}
-        ],
-        dough: [
-          { "id": 1, code:"light"},
-          { "id": 2, code:"large"},
-        ],
-        sizes:[
-          { "id": 1, code:"small"},
-          { "id": 2, code:"normal"},
-          { "id": 3, code:"big"},
-        ]
+        ingredients: {
+          1: "mushrooms",
+          2: "cheddar",
+          3: "salami",
+          4: "ham",
+          5: "ananas",
+          6: "bacon",
+          7: "onion",
+          8: "chile",
+          9: "jalapeno",
+          10: "olives",
+          11: "tomatoes",
+          12: "salmon",
+          13: "mozzarella",
+          14: "parmesan",
+          15: "blue_cheese"
+        },
+        dough: {
+          1: "light",
+          2: "large",
+        },
+        sizes:{
+           1: "small",
+           2: "normal",
+           3: "big",
+        },
+        sauces:{
+          1: "tomato",
+          2: "creamy"
+        }
       }
     }
   },
 
   methods:{
-    getClass(class_key, id) {
-        return this.classes[class_key].find(elem=>elem.id == id).code;
+    DoughHandler(id){
+      let elem = this.dough.find(elem => elem.id == id)
+      this.selectedDough = elem.class == "large" ? "big" : "small"
+      this.$set(this.priseData, 'dough', elem.price)
     },
-    DoughHandler(value){
-        this.prise_data["dough"] = this.fulldata.dough.find(elem => elem.id == value).price
-        this.calculateTotalPrise()
-    },
-    SouceHandler(value){
-        this.prise_data["sauces"] = this.fulldata.sauces.find(elem => elem.id == value).price
-        this.calculateTotalPrise()
+    SouceHandler(id){
+      let elem = this.sauces.find(elem => elem.id == id)
+      this.selectedSauce = elem.class
+      this.$set(this.priseData, 'sauces', elem.price)
     },
     IngredientsCounterHandler(count, id){
-        let ingredients = [...this.fulldata.ingredients]
-        let ingredient = ingredients.find(elem => elem.id == id) 
-        const findIndex = element => element.id == ingredient.id;
-        let index = ingredients.findIndex(findIndex)
-        ingredients[index] =  {...ingredient, value: count}
-        this.fulldata.ingredients = ingredients
-        this.prise_data[`ingridient_${id}`] = this.fulldata.ingredients.find(elem => elem.id == id).price * count
-        this.calculateTotalPrise()
+      this.setCountToIngredient(count, id)
+      this.$set(this.priseData, `ingridient_${id}`,  this.ingredients.find(elem => elem.id == id).price * count)
     },
-    calculateTotalPrise(){
-        this.total_price = Object.values(this.prise_data).reduce((current, key) => current + key, 0);
+    setCountToIngredient(count, id){
+        let ingredient = this.ingredients.find(elem => elem.id == id) 
+        let index = this.ingredients.findIndex(element => element.id == ingredient.id)
+        this.$set( this.ingredients, index, {...ingredient, count})
     },
-    TextHandler(value){
-        console.log(value)
+    SizeHandler(id){
+      this.priseMultiplier = this.sizes.find(elem => elem.id == id).multiplier
     },
-    SizeHandler(value){
-        console.log(value)
+    addClassToElems(type){
+        this.fulldata[type].forEach((elem, index) => {
+          this.$set(this.fulldata[type], index, {...elem, class: this.classes[type][elem.id]})
+        });  
+        return this.fulldata[type]
     },
+    TextHandler(id){
+        console.log(id)
+    },
+  },
+  computed:{
+    totalPrice(){
+      return Object.values(this.priseData).reduce((current, key) => current + key, 0) * this.priseMultiplier;
+    },
+    sizes(){
+      return this.addClassToElems("sizes")
+    },
+    dough(){
+       return this.addClassToElems("dough")
+    },
+    ingredients(){
+       return this.addClassToElems("ingredients")
+    },
+    sauces(){
+      return this.addClassToElems("sauces")
+    }
   }
-  
 };
 </script>
 

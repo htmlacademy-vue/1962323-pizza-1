@@ -18,13 +18,19 @@ export default {
     transferData: {
       type: Object,
       required: true
+    },
+    ingredientsCounter:{
+      type: Object,
+      required: true
     }
   },
 
   computed: {
-   
     draggable() {
-      return true
+      if(!this.transferData.count || this.transferData.count < this.ingredientsCounter.max){
+         return true
+      }
+     return false
     }
   },
 

@@ -4,11 +4,11 @@
             <h2 class="title title--small sheet__title">Выберите размер</h2>
             <div class="sheet__content diameter"> 
                 <RadioButton  
-                    v-for="size of fulldata.sizes" 
-                    :label_class="`diameter__input diameter__input--${get_class('sizes', size.id)}`" 
-                    :input_class="'visually-hidden'"
-                    :name="'diameter'" 
-                    :key="size.id" 
+                    v-for="size of sizes" 
+                    :label-class="`diameter__input diameter__input--${size.class}`" 
+                    input-class="visually-hidden"
+                    name="diameter" 
+                    :key="size.id"
                     :value="size.id" 
                     @input="handler"
                     >
@@ -25,18 +25,14 @@ export default {
         RadioButton
     },
     props:{
-        fulldata:{
-            type:Object,
-            required: true
-        },
-        get_class: {
-            type: Function,
+        sizes:{
+            type: Array,
             required: true
         }
     },
     methods:{
         handler(value){
-            this.$emit("input", value)
+            this.$emit("SizeHandler", value)
         }
     }
 }
