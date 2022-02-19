@@ -1,13 +1,13 @@
 <template>
-   <Main/>
+   <AppLayout/>
 </template>
 
 <script>
-import Main from '@/layouts/AppLayout'
+import AppLayout from '@/layouts/AppLayout'
 
 export default {
   name: "App",
-  components:{ Main }
+  components:{ AppLayout }
 };
 </script>
 

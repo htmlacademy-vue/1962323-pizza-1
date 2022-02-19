@@ -1,14 +1,13 @@
 <template>
     <div>
         <Header/>
-        <Main/>
+        <router-view  />
     </div>
 </template>
 <script>
-import Main from '@/views/Index'
 import Header from '@/modules/Header'
 export default {
-  components:{ Main, Header }
+  components:{ Header }
 }
 </script>
 
