@@ -27,6 +27,7 @@
             @TextHandler="TextHandler"
             @IngredientsCounterHandler="IngredientsCounterHandler"
           />
+   
         </div>
       </form>
     </main>
