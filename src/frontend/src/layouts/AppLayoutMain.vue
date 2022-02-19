@@ -1,7 +1,7 @@
 <template>
     <div>
         <Header/>
-        <router-view  />
+        <slot/>
     </div>
 </template>
 <script>
