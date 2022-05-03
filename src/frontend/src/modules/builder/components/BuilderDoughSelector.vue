@@ -7,10 +7,11 @@
                     v-for="dough of doughs" 
                     :label-class="`dough__input dough__input--${dough.class}`" 
                     input-class="visually-hidden"
-                    name="dought" 
+                    name="dough" 
                     :key="dough.id"
                     :value="dough.id"
-                    @input="handler"
+                    @input="setDough"
+                    :selectedValue="configuredPizza.dough ? configuredPizza.dough.id : null"
                     >
                         <b>{{dough.name}}</b>
                         <span>{{dough.description}}</span>
@@ -21,21 +22,18 @@
 </template>
 <script>
 import RadioButton from '@/common/components/RadioButton'
+import { mapMutations, mapState, mapActions } from "vuex";
 export default {
     components:{
         RadioButton
     },
-    props:{
-        doughs:{
-            type: Array,
-            required: true
-        }
-    },
     methods:{
-        handler(value){
-            this.$emit("DoughHandler", value)
-        }
+         ...mapActions("PizzaConstructor", ["setDough"])
+    },
+    computed:{
+        ...mapState("PizzaConstructor", {doughs:"dough", configuredPizza: "configuredPizza"})
     }
+ 
 }
 </script>
 

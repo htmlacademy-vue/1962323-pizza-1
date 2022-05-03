@@ -12,7 +12,8 @@
                     name="sauce"
                     :key="sauce.id"
                     :value="sauce.id"
-                    @input="SouceHandler"
+                    :selectedValue="configuredPizza.sauce ? configuredPizza.sauce.id : null"
+                    @input="setSouce"
                     >
                     <span>{{sauce.name}}</span>
                 </RadioButton>
@@ -21,13 +22,12 @@
                 <p>Начинка:</p>
                 <ul class="ingredients__list">
                     <li class="ingredients__item" v-for="ingredient of ingredients" :key="ingredient.id">
-                        <AppDrag :transfer-data="ingredient" :ingredients-counter="ingredientsCounter">
+                        <AppDrag :transfer-data="ingredient">
                             <span :class="`filling filling--${ingredient.class}`">{{ingredient.name}}</span>
                         </AppDrag>
                         <ItemCounter 
                             :ingredient="ingredient"
-                            :ingredients-counter="ingredientsCounter"
-                            @IngredientsCounterHandler="IngredientsCounterHandler"
+                            @IngredientsCounterHandler="setIngredientCount"
                         />
                     </li>
                 </ul>
@@ -41,33 +41,19 @@
 import ItemCounter from '@/common/components/ItemCounter'
 import RadioButton from '@/common/components/RadioButton'
 import AppDrag from '@/common/components/AppDrag'
+import { mapState, mapActions, mapGetters } from "vuex";
 export default {
     components:{
         ItemCounter,
         RadioButton,
         AppDrag
     },
-    props:{
-        ingredients:{
-            type: Array,
-            required: true
-        },
-        sauces:{
-            type: Array,
-            required: true
-        },
-        ingredientsCounter:{
-             type:Object,
-            required: true
-        }
+    computed:{
+        ...mapGetters("PizzaConstructor", ["ingredients"]),
+        ...mapState("PizzaConstructor", ["sauces", "configuredPizza"])
     },
     methods:{
-        SouceHandler(value){
-            this.$emit("SouceHandler", value)
-        },
-        IngredientsCounterHandler(value, id){
-            this.$emit("IngredientsCounterHandler", value, id)
-        }
+        ...mapActions("PizzaConstructor", [ "setIngredientCount", "setSouce"])
     }
 }
 </script>

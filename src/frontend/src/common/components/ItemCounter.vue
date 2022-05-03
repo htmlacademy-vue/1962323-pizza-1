@@ -10,21 +10,18 @@
     </div>
 </template>
 <script>
-
+import { mapState } from "vuex";
 export default {
    props:{
        ingredient:{
            type: Object,
            required: true
-       },
-       ingredientsCounter:{
-           type: Object,
-           required: true
        }
    },
    computed:{
+        ...mapState("PizzaConstructor", ["ingredientsCounter"]),
         inputValue(){
-           return this.ingredient.count ? this.ingredient.count : 0
+            return this.ingredient.count ? this.ingredient.count : 0
         }
    },
    methods:{
@@ -37,7 +34,7 @@ export default {
             if (result > this.ingredientsCounter.max) {
                 count = this.ingredientsCounter.max
             }
-           this.$emit('IngredientsCounterHandler', count, this.ingredient.id)
+           this.$emit('IngredientsCounterHandler', {count, id: this.ingredient.id})
        }
    }
 }

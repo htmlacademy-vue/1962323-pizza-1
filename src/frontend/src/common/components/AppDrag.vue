@@ -11,21 +11,19 @@
 
 <script>
 import { DATA_TRANSFER_PAYLOAD, MOVE } from '@/common/constants';
-
+import { mapState } from "vuex";
 export default {
   name: 'AppDrag',
   props: {
     transferData: {
       type: Object,
       required: true
-    },
-    ingredientsCounter:{
-      type: Object,
-      required: true
     }
   },
 
+     
   computed: {
+       ...mapState("PizzaConstructor", ["ingredientsCounter"]),
     draggable() {
       if(!this.transferData.count || this.transferData.count < this.ingredientsCounter.max){
          return true
