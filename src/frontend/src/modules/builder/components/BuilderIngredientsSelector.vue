@@ -25,7 +25,7 @@
                         <AppDrag 
                             :transfer-data="ingredient"
                             :ingredientsCounter="ingredientsCounter"
-                            :draggableChecking="draggableChecking">
+                            :isDraggable="draggableChecking(ingredient)">
                             <span :class="`filling filling--${ingredient.class}`">{{ingredient.name}}</span>
                         </AppDrag>
                         <ItemCounter 

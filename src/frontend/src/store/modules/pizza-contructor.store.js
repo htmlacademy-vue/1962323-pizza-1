@@ -1,4 +1,4 @@
-import router from '@/router'
+import Vue from "vue";
 import { 
   SET_SIZE, 
   SET_SOUCE, 
@@ -83,7 +83,7 @@ export default {
       let ingredient = state.ingredients.find(elem => elem.id == id) 
       state.configuredPizza.ingredients = {...state.configuredPizza.ingredients, [ingredient.id]: {...ingredient, count}}
       if(count == 0){
-        delete state.configuredPizza.ingredients[ingredient.id]
+        Vue.delete(state.configuredPizza.ingredients, ingredient.id)
       }
       state.configuredPizza.priceData = {...state.configuredPizza.priceData, [`ingridient_${id}`]: state.ingredients.find(elem => elem.id == id).price * count}
     },
@@ -94,7 +94,6 @@ export default {
     },
     [CLEAR_PIZZA_CONFIGURATION](state){
       //todo - разобраться с очищением текущего билда пиццы
-      console.log("CC")
       state.configuredPizza = {
         id: Math.floor(Math.random() * 10000000) + 1  + "",
         productType: "pizza",

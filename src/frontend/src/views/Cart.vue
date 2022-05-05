@@ -37,6 +37,9 @@ export default {
     CartProductsList,
     OrderInfo
   },
+  created(){
+    this.addCountToProductsInCart()
+  },
   computed:{
     ...mapGetters("Order", ["totalPrice"])
   },
@@ -45,7 +48,7 @@ export default {
         this.handleOrder()
         router.push("/success")
       },
-    ...mapActions("Order",["handleOrder"])
+    ...mapActions("Order",["handleOrder", "addCountToProductsInCart"])
   }
 }
 </script>

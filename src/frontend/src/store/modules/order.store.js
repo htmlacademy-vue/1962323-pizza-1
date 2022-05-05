@@ -3,9 +3,9 @@ import {
     ADD_PRODUCT_TO_CART,
     CHANGE_PRODUCT_QUANTITY,
     HANDLE_ORDER,
-    ADD_ORDER_INFO
+    ADD_ORDER_INFO,
+    SET_DEFAULT_QUANTITY_TO_PRODUCTS
 } from "@/store/mutation-types";
-
 
 import additionalProducts from '@/static/misc.json'
 export default {
@@ -35,6 +35,9 @@ export default {
     },
     addOrderInfo({commit}, data){
       commit(ADD_ORDER_INFO, data)
+    },
+    addCountToProductsInCart({commit}){
+      commit(SET_DEFAULT_QUANTITY_TO_PRODUCTS)
     }
   },
   mutations: {
@@ -55,6 +58,9 @@ export default {
     },
     [ADD_ORDER_INFO](state, {value, name}){
       state.orderInfo = {...state.orderInfo, [name]: value}
+    },
+    [SET_DEFAULT_QUANTITY_TO_PRODUCTS](state){
+      state.cart = state.cart.map(product => ({...product, count: product.count ? product.count : 1}))
     }
   },
   getters:{

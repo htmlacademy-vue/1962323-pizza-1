@@ -18,19 +18,19 @@ export default {
       type: Object,
       required: true
     },
-  ingredientsCounter:{
+    ingredientsCounter:{
         type: Object,
         required: true
     },
-    draggableChecking:{
-        type: Function,
+    isDraggable:{
+        type: Boolean,
         required: false
     }
   },
   computed: {
     draggable() {
-      if(this.draggableChecking){
-         return this.draggableChecking(this.transferData)
+      if(this.isDraggable != null){
+        return this.isDraggable
       }
       return true
     }
