@@ -10,7 +10,8 @@
                     name="diameter" 
                     :key="size.id"
                     :value="size.id" 
-                    @input="handler"
+                    @input="setSize"
+                    :selectedValue="configuredPizza.size ? configuredPizza.size.id : null"
                     >
                     <span>{{size.name}}</span>
                 </RadioButton>
@@ -20,20 +21,16 @@
 </template>
 <script>
 import RadioButton from '@/common/components/RadioButton'
+import { mapState, mapActions } from "vuex";
 export default {
      components:{
         RadioButton
     },
-    props:{
-        sizes:{
-            type: Array,
-            required: true
-        }
+    computed:{
+        ...mapState("PizzaConstructor", ["sizes", "configuredPizza"])
     },
     methods:{
-        handler(value){
-            this.$emit("SizeHandler", value)
-        }
+        ...mapActions("PizzaConstructor", ["setSize"])
     }
 }
 </script>

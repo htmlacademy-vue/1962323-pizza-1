@@ -1,43 +1,75 @@
 <template>
-    <div class="counter counter--orange ingredients__counter">
-        <button type="button" class="counter__button counter__button--minus"  @click="changeCounter(-1, inputValue)" :disabled="inputValue == ingredientsCounter.min">
+    <div :class="`counter ${counterClass}`">
+        <button type="button" :class="`counter__button counter__button--minus ${minusClass}`"  @click="changeCounter('decrement', -1, product.count)" :disabled="decrementDisabled">
             <span class="visually-hidden">Меньше</span>
         </button>
-        <input type="text" :name="`counter-${ingredient.id}`" class="counter__input" :value="inputValue" disabled>
-        <button type="button" class="counter__button counter__button--plus" @click="changeCounter(1, inputValue)" :disabled="inputValue == ingredientsCounter.max">
+        <input type="text" :name="`counter-${product.id}`" class="counter__input" :value="product.count" @change="changeCounter('input', Number($event.target.value), product.count)">
+        <button type="button" :class="`counter__button counter__button--plus ${plusClass}`" @click="changeCounter('increment', 1, product.count)" :disabled="incrementDisabled">
             <span class="visually-hidden">Больше</span>
         </button>
     </div>
 </template>
 <script>
-
 export default {
    props:{
-       ingredient:{
+        product:{
            type: Object,
            required: true
-       },
-       ingredientsCounter:{
-           type: Object,
-           required: true
+        },
+        range:{
+            type: Object,
+            required: false
+        },
+        counterClass:{
+           type: String,
+           default: ""
+        },
+        plusClass:{
+            type: String,
+            default: ""
+        },
+        minusClass:{
+            type: String,
+            default: ""
        }
    },
    computed:{
-        inputValue(){
-           return this.ingredient.count ? this.ingredient.count : 0
+     decrementDisabled(){
+        if(this.range){
+            return this.isDisabled("min")
         }
+        if(this.product.count == 0){
+            return true
+        }
+        return false
+     },
+     incrementDisabled(){
+        if(this.range){
+            return this.isDisabled("max")
+        }
+        return false
+     }
    },
    methods:{
-       changeCounter(prefix, value) {
+       isDisabled(type){
+           if(this.range.hasOwnProperty(type)){
+               return this.product.count == this.range[type]
+           }
+           return false
+       },
+       changeCounter(changeType, prefix, value) {
+            if(changeType == "input"){
+                value = 0
+            }
             let result = value + prefix
             let count = result
-            if (result == -1) {
-               count = 0;
+            if (result < 0) {
+                count = 0;
             }
-            if (result > this.ingredientsCounter.max) {
-                count = this.ingredientsCounter.max
+            if (this.range && result > this.range.max) {
+                count = this.range.max
             }
-           this.$emit('IngredientsCounterHandler', count, this.ingredient.id)
+            this.$emit('counterHandler', {count, id: this.product.id})
        }
    }
 }

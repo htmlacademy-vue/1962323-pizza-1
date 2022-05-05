@@ -1,6 +1,6 @@
 <template>
     <label :class="labelClass">
-        <input type="radio" :name="name" :value="value" :class="inputClass" @input="$emit('input', $event.target.value)"/>
+        <input type="radio" :name="name" :value="value" :class="inputClass" @change="$emit('input', $event.target.value)" :checked="selectedValue == value"/>
         <slot/>
     </label>
 </template>
@@ -17,6 +17,10 @@ export default {
         },
         labelClass:{
             type:String,
+            default: ""
+        },
+        selectedValue:{
+            type: [String, Number],
             default: ""
         },
         value:{

@@ -11,7 +11,6 @@
 
 <script>
 import { DATA_TRANSFER_PAYLOAD, MOVE } from '@/common/constants';
-
 export default {
   name: 'AppDrag',
   props: {
@@ -20,20 +19,22 @@ export default {
       required: true
     },
     ingredientsCounter:{
-      type: Object,
-      required: true
+        type: Object,
+        required: true
+    },
+    isDraggable:{
+        type: Boolean,
+        required: false
     }
   },
-
   computed: {
     draggable() {
-      if(!this.transferData.count || this.transferData.count < this.ingredientsCounter.max){
-         return true
+      if(this.isDraggable != null){
+        return this.isDraggable
       }
-     return false
+      return true
     }
   },
-
   methods: {
     onDrag({ dataTransfer }) {
       dataTransfer.effectAllowed = MOVE;
