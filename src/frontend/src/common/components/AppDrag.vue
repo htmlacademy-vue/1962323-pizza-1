@@ -11,27 +11,30 @@
 
 <script>
 import { DATA_TRANSFER_PAYLOAD, MOVE } from '@/common/constants';
-import { mapState } from "vuex";
 export default {
   name: 'AppDrag',
   props: {
     transferData: {
       type: Object,
       required: true
+    },
+  ingredientsCounter:{
+        type: Object,
+        required: true
+    },
+    draggableChecking:{
+        type: Function,
+        required: false
     }
   },
-
-     
   computed: {
-       ...mapState("PizzaConstructor", ["ingredientsCounter"]),
     draggable() {
-      if(!this.transferData.count || this.transferData.count < this.ingredientsCounter.max){
-         return true
+      if(this.draggableChecking){
+         return this.draggableChecking(this.transferData)
       }
-     return false
+      return true
     }
   },
-
   methods: {
     onDrag({ dataTransfer }) {
       dataTransfer.effectAllowed = MOVE;

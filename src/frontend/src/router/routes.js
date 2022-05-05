@@ -31,7 +31,7 @@ export default [
     },
     {
         path: '/success',
-        name: 'Login',
+        name: 'Popup',
         component: () => import('../views/Popup.vue'),
         meta: { layout: 'AppLayoutLogout' }
     }

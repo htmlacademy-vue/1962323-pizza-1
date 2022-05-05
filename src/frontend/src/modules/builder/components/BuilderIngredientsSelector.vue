@@ -22,12 +22,17 @@
                 <p>Начинка:</p>
                 <ul class="ingredients__list">
                     <li class="ingredients__item" v-for="ingredient of ingredients" :key="ingredient.id">
-                        <AppDrag :transfer-data="ingredient">
+                        <AppDrag 
+                            :transfer-data="ingredient"
+                            :ingredientsCounter="ingredientsCounter"
+                            :draggableChecking="draggableChecking">
                             <span :class="`filling filling--${ingredient.class}`">{{ingredient.name}}</span>
                         </AppDrag>
                         <ItemCounter 
-                            :ingredient="ingredient"
-                            @IngredientsCounterHandler="setIngredientCount"
+                            :product="ingredient"
+                            :range="ingredientsCounter"
+                             counterClass="counter--orange ingredients__counter"
+                            @counterHandler="setIngredientCount"
                         />
                     </li>
                 </ul>
@@ -41,6 +46,7 @@
 import ItemCounter from '@/common/components/ItemCounter'
 import RadioButton from '@/common/components/RadioButton'
 import AppDrag from '@/common/components/AppDrag'
+import consts from '@/static/consts.json'
 import { mapState, mapActions, mapGetters } from "vuex";
 export default {
     components:{
@@ -49,10 +55,19 @@ export default {
         AppDrag
     },
     computed:{
+        ingredientsCounter(){
+          return consts.ingredientsCounter
+        },
         ...mapGetters("PizzaConstructor", ["ingredients"]),
         ...mapState("PizzaConstructor", ["sauces", "configuredPizza"])
     },
     methods:{
+        draggableChecking(indgredient){
+             if(!indgredient.count || indgredient.count < this.ingredientsCounter.max){
+                return true
+            }
+            return false
+        },
         ...mapActions("PizzaConstructor", [ "setIngredientCount", "setSouce"])
     }
 }

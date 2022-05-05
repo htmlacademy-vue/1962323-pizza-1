@@ -7,11 +7,12 @@ import {
   SET_CLASS_TO_ELEMS,
   SET_NAME,
   CLEAR_PIZZA_CONFIGURATION,
-  ADD_PRODUCT_TO_CART
+  ADD_PRODUCT_TO_CART,
+  CHANGE_PIZZA_CONFIGURATION
 } from "@/store/mutation-types";
 
 import fulldata from '@/static/pizza.json'
-
+import consts from '@/static/consts.json'
 export default {
   namespaced: true,
   state: {
@@ -28,42 +29,6 @@ export default {
       priceData: {},
     },
     priceMultiplier: 1,
-     ingredientsCounter:{
-         min: 0,
-         max: 3
-     },
-     classes:{
-       ingredients: {
-         1: "mushrooms",
-         2: "cheddar",
-         3: "salami",
-         4: "ham",
-         5: "ananas",
-         6: "bacon",
-         7: "onion",
-         8: "chile",
-         9: "jalapeno",
-         10: "olives",
-         11: "tomatoes",
-         12: "salmon",
-         13: "mozzarella",
-         14: "parmesan",
-         15: "blue_cheese"
-       },
-       dough: {
-         1: "light",
-         2: "large",
-       },
-       sizes:{
-          1: "small",
-          2: "normal",
-          3: "big",
-       },
-       sauces:{
-         1: "tomato",
-         2: "creamy"
-       }
-     }
   },
   actions:{
     setDough({commit}, id){
@@ -89,8 +54,11 @@ export default {
       let product = {...state.configuredPizza, price: getters.totalPrice}
       commit('Order/' + ADD_PRODUCT_TO_CART, product, { root: true })
       commit(CLEAR_PIZZA_CONFIGURATION)
-      router.push("/cart")
-    }
+      
+    },
+    changePizzaConfiguration({commit}, product){
+      commit(CHANGE_PIZZA_CONFIGURATION, product)
+    },
   },
   mutations: {
     [SET_NAME](state, name){
@@ -120,21 +88,23 @@ export default {
       state.configuredPizza.priceData = {...state.configuredPizza.priceData, [`ingridient_${id}`]: state.ingredients.find(elem => elem.id == id).price * count}
     },
     [SET_CLASS_TO_ELEMS](state, types){
-        types.map(type=>{
-          state[type] = state[type].map( elem => ({
-              ...elem, class: state.classes[type][elem.id]  
-          }));  
+        types.forEach(type=>{
+          state[type] = state[type].map( elem => ({...elem, class: consts.classes[type][elem.id]}));  
         })
     },
     [CLEAR_PIZZA_CONFIGURATION](state){
       //todo - разобраться с очищением текущего билда пиццы
+      console.log("CC")
       state.configuredPizza = {
         id: Math.floor(Math.random() * 10000000) + 1  + "",
         productType: "pizza",
         ingredients: {},
         priceData: {}
       }
-  }
+    },
+    [CHANGE_PIZZA_CONFIGURATION](state, product){
+      state.configuredPizza = {...product}
+    },
   },
   getters:{
     totalPrice(state){

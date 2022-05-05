@@ -1,19 +1,4 @@
 <template>
-    <!DOCTYPE html>
-    <html lang="ru">
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="preload" href="fonts/roboto-bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-    <link rel="preload" href="fonts/roboto-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-    <link rel="preload" href="fonts/roboto-light.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-    <link rel="preload" href="fonts/roboto-bold.woff" as="font" type="font/woff" crossorigin="anonymous">
-    <link rel="preload" href="fonts/roboto-regular.woff" as="font" type="font/woff" crossorigin="anonymous">
-    <link rel="preload" href="fonts/roboto-light.woff" as="font" type="font/woff" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.min.css">
-    <title>V!U!E! Pizza - Попап</title>
-    </head>
-    <body>
     <div class="popup">
         <router-link to="/" class="close">
             <span class="visually-hidden">Закрыть попап</span>
@@ -26,7 +11,4 @@
             <router-link to="/" class="button">Отлично, я жду!</router-link>
         </div>
     </div>
-    </body>
-    </html>
-
 </template>

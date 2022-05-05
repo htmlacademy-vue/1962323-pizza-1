@@ -21,7 +21,7 @@
         <b>Итого: {{totalPrice}} ₽</b>
       </div>
       <div class="footer__submit">
-        <button type="button" class="button" @click="handleOrder">Оформить заказ</button>
+        <button type="button" class="button" @click="createOrder">Оформить заказ</button>
       </div>
     </section>
   </form>
@@ -31,7 +31,7 @@ import CartProductsList from '@/modules/cart/components/CartProductsList'
 import OrderInfo from '@/modules/cart/components/OrderInfo'
 
 import { mapActions, mapGetters } from 'vuex'
-
+import router from '@/router'
 export default {
   components:{
     CartProductsList,
@@ -41,6 +41,10 @@ export default {
     ...mapGetters("Order", ["totalPrice"])
   },
   methods:{
+      createOrder(){
+        this.handleOrder()
+        router.push("/success")
+      },
     ...mapActions("Order",["handleOrder"])
   }
 }
