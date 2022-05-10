@@ -46,7 +46,7 @@
 import ItemCounter from '@/common/components/ItemCounter'
 import RadioButton from '@/common/components/RadioButton'
 import AppDrag from '@/common/components/AppDrag'
-import consts from '@/static/consts.json'
+import { ingredientsCounter } from '@/static/consts.json'
 import { mapState, mapActions, mapGetters } from "vuex";
 export default {
     components:{
@@ -56,14 +56,14 @@ export default {
     },
     computed:{
         ingredientsCounter(){
-          return consts.ingredientsCounter
+          return ingredientsCounter
         },
         ...mapGetters("PizzaConstructor", ["ingredients"]),
         ...mapState("PizzaConstructor", ["sauces", "configuredPizza"])
     },
     methods:{
         draggableChecking(indgredient){
-             if(!indgredient.count || indgredient.count < this.ingredientsCounter.max){
+             if(!indgredient.quantity || indgredient.quantity < this.ingredientsCounter.max){
                 return true
             }
             return false

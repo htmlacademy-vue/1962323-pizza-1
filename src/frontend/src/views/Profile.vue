@@ -4,9 +4,8 @@
       <a href="index.html" class="logo layout__logo">
         <img src="img/logo.svg" alt="V!U!E! Pizza logo" width="90" height="40">
       </a>
-
-      <a class="layout__link" href="#">История заказов</a>
-      <a class="layout__link layout__link--active" href="#">Мои данные</a>
+        <router-link to="/orders" class="layout__link">История заказов</router-link>
+        <router-link to="/profile" class="layout__link layout__link--active">Мои данные</router-link>
     </div>
 
     <div class="layout__content">
@@ -16,25 +15,24 @@
 
       <div class="user">
         <picture>
-          <source type="image/webp" srcset="img/users/user5@2x.webp 1x, img/users/user5@4x.webp 2x">
-          <img src="img/users/user5@2x.jpg" srcset="img/users/user5@4x.jpg" alt="Василий Ложкин" width="72" height="72">
+          <img :src="user.avatar" :alt="user.name" width="72" height="72">
         </picture>
         <div class="user__name">
-          <span>Василий Ложкин</span>
+          <span>{{user.name}}</span>
         </div>
-        <p class="user__phone">Контактный телефон: <span>+7 999-999-99-99</span></p>
+        <p class="user__phone">Контактный телефон: <span>{{user.phone}}</span></p>
       </div>
 
       <div class="layout__address">
-        <div class="sheet address-form">
+        <div class="sheet address-form" v-for="address in addresses" :key="address.id">
           <div class="address-form__header">
-            <b>Адрес №1. Тест</b>
+            <b>{{address.name}}</b>
             <div class="address-form__edit">
               <button type="button" class="icon"><span class="visually-hidden">Изменить адрес</span></button>
             </div>
           </div>
-          <p>Невский пр., д. 22, кв. 46</p>
-          <small>Позвоните, пожалуйста, от проходной</small>
+          <p>{{address.street}}, д. {{address.building}}, кв. {{address.flat}}</p>
+          <small>{{address.comment}}</small>
         </div>
       </div>
 
@@ -48,45 +46,74 @@
             <div class="address-form__input">
               <label class="input">
                 <span>Название адреса*</span>
-                <input type="text" name="addr-name" placeholder="Введите название адреса" required>
+                <input type="text" name="addr-name" v-model="address.name" placeholder="Введите название адреса" required>
               </label>
             </div>
             <div class="address-form__input address-form__input--size--normal">
               <label class="input">
                 <span>Улица*</span>
-                <input type="text" name="addr-street" placeholder="Введите название улицы" required>
+                <input type="text" name="addr-street" v-model="address.street" placeholder="Введите название улицы" required>
               </label>
             </div>
             <div class="address-form__input address-form__input--size--small">
               <label class="input">
                 <span>Дом*</span>
-                <input type="text" name="addr-house" placeholder="Введите номер дома" required>
+                <input type="text" name="addr-house" v-model="address.building" placeholder="Введите номер дома" required>
               </label>
             </div>
             <div class="address-form__input address-form__input--size--small">
               <label class="input">
                 <span>Квартира</span>
-                <input type="text" name="addr-apartment" placeholder="Введите № квартиры">
+                <input type="text" name="addr-apartment"  v-model="address.flat" placeholder="Введите № квартиры">
               </label>
             </div>
             <div class="address-form__input">
               <label class="input">
                 <span>Комментарий</span>
-                <input type="text" name="addr-comment" placeholder="Введите комментарий">
+                <input type="text" name="addr-comment" v-model="address.comment" placeholder="Введите комментарий">
               </label>
             </div>
           </div>
 
           <div class="address-form__buttons">
             <button type="button" class="button button--transparent">Удалить</button>
-            <button type="submit" class="button">Сохранить</button>
+            <button type="button" class="button" @click="addNewAddress(address)">Сохранить</button>
           </div>
         </form>
       </div>
 
       <div class="layout__button">
-        <button type="button" class="button button--border">Добавить новый адрес</button>
+        <button type="button" class="button button--border" >Добавить новый адрес</button>
       </div>
     </div>
   </main>
 </template>
+<script>
+
+import { mapState, mapActions, mapGetters } from 'vuex'
+
+export default {
+    created(){
+      this.getAddresses()
+    },
+    data(){
+      return {
+        address:{
+            name: "",
+            street: "",
+            building: "",
+            flat: "",
+            comment: ""
+        }
+      }
+    },
+    computed:{
+      ...mapState("Auth", ["user"]),
+      ...mapState("Profile", ["addresses"])
+    },
+    methods:{
+      ...mapActions("Profile", ["addNewAddress", "getAddresses"])
+    }
+}
+
+</script>

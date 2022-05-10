@@ -6,7 +6,7 @@
       <SelectInput 
         name = "delivery"
         :options = "options"
-        :value = "orderInfo.delivery"
+        :value = "address.delivery"
         @input = "handleInfo"
       />
     </label>
@@ -16,7 +16,7 @@
         <TextInput
           name="phone"
           place-holder="+7 999-999-99-99"
-          :value = "orderInfo.phone"
+          :value = "phone"
           @input = "handleInfo"
         />
     </label>
@@ -30,7 +30,7 @@
            <TextInput
             name="street"
             place-holder=""
-            :value = "orderInfo.street"
+            :value = "address.street"
             @input = "handleInfo"
            />
         </label>
@@ -40,9 +40,9 @@
         <label class="input">
           <span>Дом*</span>
             <TextInput
-            name="house"
+            name="building"
             place-holder=""
-            :value = "orderInfo.house"
+            :value = "address.building"
             @input = "handleInfo"
            />
         </label>
@@ -54,7 +54,7 @@
             <TextInput
               name="flat"
               place-holder=""
-              :value = "orderInfo.flat"
+              :value = "address.flat"
               @input = "handleInfo"
             />
         </label>
@@ -85,13 +85,13 @@ export default {
       }
     },
     computed:{
-        ...mapGetters("Order", ["pizzaProducts", "additionalProducts"]),
-        ...mapState("Order", ["orderInfo"])
+        ...mapGetters("Order", ["additionalProducts"]),
+        ...mapState("Order", ["address", "phone"])
     },
     methods:{
-      ...mapActions("Order", ["addOrderInfo"]),
+      ...mapActions("Order", ["addAddress"]),
       handleInfo(value, name){
-          this.addOrderInfo({value, name})
+          this.addAddress({value, name})
       }
     }
 }

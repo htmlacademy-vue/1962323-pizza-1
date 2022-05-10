@@ -28,12 +28,13 @@ export default {
   },
   created() {
    this.setClassToElems()
+   this.getPizzaData()
   },
   data(){
     return {}
   },
   methods:{
-    ...mapActions("PizzaConstructor", ["setClassToElems"]),
+    ...mapActions("PizzaConstructor", ["setClassToElems", "getPizzaData"]),
   }
 };
 </script>

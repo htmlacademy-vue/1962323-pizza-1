@@ -26,9 +26,9 @@
 //import BuilderPriceCounter from '@/modules/builder/components/BuilderPriceCounter'
 import TextInput from '@/common/components/TextInput'
 import AppDrop from '@/common/components/AppDrop'
-import router from '@/router'
-import consts from '@/static/consts.json'
+import { ingredientsCounter } from '@/static/consts.json'
 import { mapState, mapActions, mapGetters } from "vuex";
+import { getElemFromStore } from '@/common/helpers';
 export default {
     components:{
         TextInput,
@@ -37,31 +37,37 @@ export default {
     methods:{
         addToCart(){
             this.addPizzaToCart()
-            router.push("/cart")
+            this.$router.push("/cart")
         },  
         ...mapActions("PizzaConstructor", ["setIngredientCount", "setPizzaName", "addPizzaToCart"]),
         moveTask(ingridient){
-            let count = ingridient.count
-            let result = count ? count += 1 : 1
-            count = result
+            let quantity = ingridient.quantity
+            let result = quantity ? quantity += 1 : 1
+            quantity = result
             if(result > this.ingredientsCounter.max) {
-                count = this.ingredientsCounter.max
+                quantity = this.ingredientsCounter.max
             }
-            this.setIngredientCount({count, id: ingridient.id})
+            this.setIngredientCount({quantity, id: ingridient.id})
         }
     },
     computed:{
         ingredientsCounter(){
-            return consts.ingredientsCounter
+            return ingredientsCounter
         },
         ...mapGetters("PizzaConstructor", ["totalPrice", "ingredients"]),
         ...mapState("PizzaConstructor", ["configuredPizza"]),
         choosenIngredients(){
-            return this.ingredients.filter(ingredient => ingredient.count && ingredient.count > 0)
+            return this.ingredients.filter(ingredient => ingredient.quantity && ingredient.quantity > 0)
         },
         getViewClass(){
-            let doughClass = this.configuredPizza.dough ? this.configuredPizza.dough.class : 'big'
-            let sauceClass = this.configuredPizza.sauce ? this.configuredPizza.sauce.class : 'creamy'
+            let dough = getElemFromStore(this.$store.state.PizzaConstructor, "dough", this.configuredPizza.doughId)
+            let sauce = getElemFromStore(this.$store.state.PizzaConstructor, "sauces", this.configuredPizza.sauceId)
+
+            let doughClass = dough ? dough.class : 'large'
+            let sauceClass = sauce ? sauce.class : 'creamy'
+/*
+            let doughClass = this.configuredPizza.dough ? this.configuredPizza.dough.class : 'large'
+            let sauceClass = this.configuredPizza.sauce ? this.configuredPizza.sauce.class : 'creamy'*/
             return doughClass + "-" + sauceClass
         }
     }

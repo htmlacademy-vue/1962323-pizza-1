@@ -4,8 +4,16 @@
     </component>
 </template>
 <script>
+import {mapActions } from "vuex";
+  import { setAuth } from '@/common/helpers';
   const defaultLayout= "AppLayoutMain"
   export default {
+    created() {
+    if (this.$jwt.getToken()) {
+        setAuth(this.$store);
+    }
+  //  this.$store.dispatch('init');
+  },
     name: "App",
       computed: {
       layout() {
