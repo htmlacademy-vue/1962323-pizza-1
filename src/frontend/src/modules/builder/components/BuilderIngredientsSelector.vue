@@ -12,7 +12,7 @@
                     name="sauce"
                     :key="sauce.id"
                     :value="sauce.id"
-                    :selectedValue="configuredPizza.sauce ? configuredPizza.sauce.id : null"
+                    :selected-value="configuredPizza.sauce ? configuredPizza.sauce.id : null"
                     @input="setSouce"
                     >
                     <span>{{sauce.name}}</span>
@@ -24,14 +24,14 @@
                     <li class="ingredients__item" v-for="ingredient of ingredients" :key="ingredient.id">
                         <AppDrag 
                             :transfer-data="ingredient"
-                            :ingredientsCounter="ingredientsCounter"
-                            :isDraggable="draggableChecking(ingredient)">
+                            :ingredients-counter="ingredientsCounter"
+                            :is-draggable="draggableChecking(ingredient)">
                             <span :class="`filling filling--${ingredient.class}`">{{ingredient.name}}</span>
                         </AppDrag>
                         <ItemCounter 
                             :product="ingredient"
                             :range="ingredientsCounter"
-                             counterClass="counter--orange ingredients__counter"
+                            counter-class="counter--orange ingredients__counter"
                             @counterHandler="setIngredientCount"
                         />
                     </li>

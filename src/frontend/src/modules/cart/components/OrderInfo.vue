@@ -6,8 +6,8 @@
       <SelectInput 
         name = "delivery"
         :options = "options"
-        :value = "address.delivery"
-        @input = "handleInfo"
+        v-model="deliveryType"
+        @input = "handleDeliveryType"
       />
     </label>
 
@@ -21,7 +21,7 @@
         />
     </label>
 
-    <div class="cart-form__address">
+    <div class="cart-form__address" v-show="deliveryType != 'takeout'">
       <span class="cart-form__label">Новый адрес:</span>
 
       <div class="cart-form__input">
@@ -30,7 +30,8 @@
            <TextInput
             name="street"
             place-holder=""
-            :value = "address.street"
+            :disabled="disabled"
+            :value = "address ? address.street : ''"
             @input = "handleInfo"
            />
         </label>
@@ -42,7 +43,8 @@
             <TextInput
             name="building"
             place-holder=""
-            :value = "address.building"
+            :disabled="disabled"
+            :value = "address ? address.building : ''"
             @input = "handleInfo"
            />
         </label>
@@ -54,7 +56,8 @@
             <TextInput
               name="flat"
               place-holder=""
-              :value = "address.flat"
+              :disabled="disabled"
+              :value = "address ? address.flat : ''"
               @input = "handleInfo"
             />
         </label>
@@ -77,21 +80,45 @@ export default {
     },
     data(){
       return {
-        options:[
-          {value: "1", name: "Заберу сам"},
-          {value: "2", name: "Новый адрес"},
-          {value: "3", name: "Дом"}
-        ]
+        deliveryType: "new_address"
       }
     },
     computed:{
+        disabled(){
+            if(this.deliveryType != "new_address" && this.deliveryType != "new_address"){
+              return true
+            }
+            return false
+        },
+        options(){
+          let options = [
+            {value: "takeout", name: "Заберу сам"},
+            {value: "new_address", name: "Новый адрес"},
+          ]
+          if(this.isAuthenticated){
+            let addresses = this.$store.state.Profile.addresses
+            addresses = addresses.map(address => ({value:address.id, name: address.name}))
+            options = [...options, ...addresses]
+          }
+          return options
+
+        },
+        ...mapState("Auth", ["isAuthenticated"]),
         ...mapGetters("Order", ["additionalProducts"]),
         ...mapState("Order", ["address", "phone"])
     },
     methods:{
-      ...mapActions("Order", ["addAddress"]),
+      ...mapActions("Order", ["setAddressValue", "setExistedAddress"]),
       handleInfo(value, name){
-          this.addAddress({value, name})
+          this.setAddressValue({value, name})
+      },
+      handleDeliveryType(value){
+        if(value == "takeout" || value == "new_address"){
+            this.setAddressValue(null)
+        }else{
+          this.setAddressValue({value, name:'id'})
+          this.setExistedAddress(value)
+        }
       }
     }
 }

@@ -4,14 +4,17 @@
     </component>
 </template>
 <script>
-import {mapActions } from "vuex";
+  import {mapActions } from "vuex";
   import { setAuth } from '@/common/helpers';
   const defaultLayout= "AppLayoutMain"
   export default {
     created() {
-    if (this.$jwt.getToken()) {
-        setAuth(this.$store);
-    }
+       this.getMiscData()
+       this.getPizzaData()
+      if (this.$jwt.getToken()) {
+          setAuth(this.$store);
+           this.getAddresses()
+      }
   //  this.$store.dispatch('init');
   },
     name: "App",
@@ -20,7 +23,12 @@ import {mapActions } from "vuex";
         const layout = this.$route.meta.layout || defaultLayout;
         return () => import(`@/layouts/${layout}.vue`);
       }
+    },
+    methods:{
+      ...mapActions("PizzaConstructor", ["getPizzaData", "getMiscData"]),
+      ...mapActions("Profile", ["getAddresses"])
     }
+
   };
 </script>
 

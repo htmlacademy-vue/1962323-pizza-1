@@ -17,7 +17,6 @@ import DoughSelector from '@/modules/builder/components/BuilderDoughSelector'
 import IngredientsSelector from '@/modules/builder/components/BuilderIngredientsSelector'
 import SizeSelector from '@/modules/builder/components/BuilderSizeSelector'
 import PizzaView from '@/modules/builder/components/BuilderPizzaView'
-import {mapActions } from "vuex";
 
 export default {
   components:{
@@ -25,16 +24,6 @@ export default {
     IngredientsSelector,
     SizeSelector,
     PizzaView
-  },
-  created() {
-   this.setClassToElems()
-   this.getPizzaData()
-  },
-  data(){
-    return {}
-  },
-  methods:{
-    ...mapActions("PizzaConstructor", ["setClassToElems", "getPizzaData"]),
   }
 };
 </script>

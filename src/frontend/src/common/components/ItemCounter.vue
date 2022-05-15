@@ -11,23 +11,27 @@
 </template>
 <script>
 export default {
-   props:{
+   props :{
         product:{
            type: Object,
            required: true
         },
+
         range:{
             type: Object,
             required: false
         },
+
         counterClass:{
            type: String,
            default: ""
         },
+
         plusClass:{
             type: String,
             default: ""
         },
+        
         minusClass:{
             type: String,
             default: ""
@@ -69,7 +73,6 @@ export default {
             if (this.range && result > this.range.max) {
                 quantity = this.range.max
             }
-            console.log()
             this.$emit('counterHandler', {quantity, id: this.product.id})
        }
    }

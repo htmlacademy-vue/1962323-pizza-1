@@ -11,7 +11,7 @@
                     :key="dough.id"
                     :value="dough.id"
                     @input="setDough"
-                    :selectedValue="configuredPizza.dough ? configuredPizza.dough.id : null"
+                    :selected-value="configuredPizza.dough ? configuredPizza.dough.id : null"
                     >
                         <b>{{dough.name}}</b>
                         <span>{{dough.description}}</span>

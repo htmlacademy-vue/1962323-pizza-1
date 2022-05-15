@@ -25,7 +25,7 @@
 
             <router-link v-if="isAuthenticated" to="/profile">
                 <picture>
-                    <img src="@/assets/img/users/user5.jpg" :alt="user.name" width="32" height="32">
+                    <img :src="user.avatar" :alt="user.name" width="32" height="32">
                 </picture>
                 <span>{{user.name}}</span>
             </router-link>  

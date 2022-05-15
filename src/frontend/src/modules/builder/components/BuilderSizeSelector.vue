@@ -11,7 +11,7 @@
                     :key="size.id"
                     :value="size.id" 
                     @input="setSize"
-                    :selectedValue="configuredPizza.size ? configuredPizza.size.id : null"
+                    :selected-value="configuredPizza.size ? configuredPizza.size.id : null"
                     >
                     <span>{{size.name}}</span>
                 </RadioButton>

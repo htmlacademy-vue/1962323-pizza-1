@@ -3,9 +3,9 @@ import {
     ADD_PRODUCT_TO_CART,
     CHANGE_PRODUCT_QUANTITY,
     HANDLE_ORDER,
-    ADD_ADDRESS_INFO,
+    CHANGE_ADDRESS_INFO,
     SET_DEFAULT_QUANTITY_TO_PRODUCTS,
-    REPEAT_ORDER
+    REPEAT_ORDER,
 } from "@/store/mutation-types";
 
 import additionalProducts from '@/static/misc.json'
@@ -13,52 +13,44 @@ export default {
   namespaced: true,
   state: {
     phone:"",
-    cart: [...additionalProducts],
+    //cart: [...additionalProducts],
+    cart: [],
     address: {
       street: "",
       building: "",
-      flat: "",
-      comment: ""
+      flat: ""
     }, 
-    // orderInfo: {
-    //   delivery: "",
-    //   phone: "",
-    //   street: "",
-    //   house: "",
-    //   flat: ""
-    // }
   },
   actions:{
-    async handleOrder({commit, getters, state, rootState}){
+    async handleOrder({commit, state, rootState}){
       let order = {}
       order.phone = state.phone
       order.address = state.address
-      order.userId = rootState.Auth.user.id
+      order.userId = rootState.Auth.user ? rootState.Auth.user.id : null
 
       let pizzas = state.cart.filter(product => product.productType == "pizza" && product.quantity > 0)
       let misc = state.cart.filter(product => product.productType != "pizza" && product.quantity > 0)
-
+   
       order.pizzas = pizzas.map(pizza => {
+        pizza.ingredients =  pizza.ingredients.map(ingredient => ({
+          ingredientId:ingredient.ingredientId,
+          quantity:ingredient.quantity
+        }))
         return {
           name: pizza.name,
           sauceId: pizza.sauceId,
           doughId: pizza.doughId,
           sizeId: pizza.sizeId,
           quantity: pizza.quantity,
-          ingredients:pizza.ingredients
+          ingredients: pizza.ingredients
         }
       })
-
-      order.misc = misc.map(product => {
-        return {
-          miscId: product.id,
-          quantity: product.quantity
-        }
-      })
-
+      order.misc = misc.map(product => ({
+        miscId: product.id,
+        quantity: product.quantity
+      }))
+      
       let response = await this.$api.orders.createOrder(order)
-      console.log("order", response)
-
       commit(HANDLE_ORDER)
     },
     changeProductQuantity({commit}, data){
@@ -67,8 +59,14 @@ export default {
       }
       commit(CHANGE_PRODUCT_QUANTITY, data)
     },
-    addAddress({commit}, data){
-      commit(ADD_ADDRESS_INFO, data)
+    setAddressValue({commit}, data){
+      commit(CHANGE_ADDRESS_INFO, data)
+    },
+    setExistedAddress({commit, rootState}, addressId){
+      let address = rootState.Profile.addresses.find(address => address.id == addressId)
+      for(let key in address){
+        commit(CHANGE_ADDRESS_INFO, {value:address[key], name: key})
+      }
     },
     addCountToProductsInCart({commit}){
       commit(SET_DEFAULT_QUANTITY_TO_PRODUCTS)
@@ -93,7 +91,15 @@ export default {
         state.cart.splice(index, 1, product);
       }
     },
-    [ADD_ADDRESS_INFO](state, {value, name}){
+    [CHANGE_ADDRESS_INFO](state, data){
+      if(data === null){
+        state.address = null
+        return
+      }
+      let {value, name} = data
+      if(!state.address){
+        state.address = {}
+      }
       if(name == "phone"){
         state[name] = value
       }else{
@@ -105,6 +111,8 @@ export default {
     },
     [REPEAT_ORDER](state, order){
         state.cart = [...order.orderPizzas, ...order.orderMisc]
+        state.address = {...order.orderAddress}
+        state.phone = order.phone
     }
   },
   getters:{

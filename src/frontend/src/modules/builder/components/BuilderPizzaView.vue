@@ -17,7 +17,7 @@
         </AppDrop>
         <div class="content__result">
             <p>Итого: <span>{{totalPrice}} ₽</span></p>
-            <button type="button" class="button"  @click="addToCart">Готовьте!</button>
+            <button type="button" class="button"  @click="addToCart" :disabled="choosenIngredients.length == 0 || !configuredPizza.name">Готовьте!</button>
         </div>
     </div>
 </template>
@@ -62,12 +62,8 @@ export default {
         getViewClass(){
             let dough = getElemFromStore(this.$store.state.PizzaConstructor, "dough", this.configuredPizza.doughId)
             let sauce = getElemFromStore(this.$store.state.PizzaConstructor, "sauces", this.configuredPizza.sauceId)
-
             let doughClass = dough ? dough.class : 'large'
             let sauceClass = sauce ? sauce.class : 'creamy'
-/*
-            let doughClass = this.configuredPizza.dough ? this.configuredPizza.dough.class : 'large'
-            let sauceClass = this.configuredPizza.sauce ? this.configuredPizza.sauce.class : 'creamy'*/
             return doughClass + "-" + sauceClass
         }
     }

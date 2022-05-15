@@ -18,7 +18,6 @@ export default {
   actions: {
     async login({ commit, dispatch }, credentials) {
       const data = await this.$api.auth.login(credentials);
-      console.log("QWE", data)
       this.$jwt.saveToken(data.token);
       this.$api.auth.setAuthHeader();
       dispatch('getMe');
@@ -30,7 +29,6 @@ export default {
       }
       this.$jwt.destroyToken();
       this.$api.auth.setAuthHeader();
-      console.log(SET_ENTITY)
       commit(
         SET_ENTITY,
         { module: 'Auth', entity: 'isAuthenticated', value: false },

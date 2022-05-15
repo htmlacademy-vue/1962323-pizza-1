@@ -1,3 +1,4 @@
+import { auth } from '@/middlewares';
 export default [
     {
         path: '/',
@@ -15,13 +16,19 @@ export default [
         path: '/profile',
         name: 'Profile',
         component: () => import('../views/Profile.vue'),
-        meta: { layout: 'AppLayoutMain' }
+        meta: { 
+            layout: 'AppLayoutMain',
+            middlewares: [auth]  
+        }
     },
     {
         path: '/orders',
         name: 'Orders',
         component: () => import('../views/Orders.vue'),
-        meta: { layout: 'AppLayoutMain' }
+        meta: {
+            layout: 'AppLayoutMain', 
+            middlewares: [auth] 
+        }
     },
     {
         path: '/login',

@@ -3,9 +3,6 @@ import {
     DELETE_ORDER
 } from "@/store/mutation-types";
 import {
-    getPizzaInfo,
-    getPizzaSauce,
-    getPizzaIngredients,
     getPizzaPrice
 } from '@/common/helpers';
 export default {
@@ -33,11 +30,13 @@ export default {
     },
     getters: {
         ordersPrice(state, getters, rootState) {
-            //todo брать misc не из cart
             let editedOrders = state.orders.map(order => {
                 let totalPrice = 0
+                let orderMisc = []
+                let orderPizzas = []
+               
                 if (order.orderMisc) {
-                    order.orderMisc = order.orderMisc.map(misc => {
+                    orderMisc = order.orderMisc.map(misc => {
                         let miscCart = rootState.Order.cart.find(product => product.id == misc.miscId)
                         if (miscCart) {
                             totalPrice += (miscCart.price * misc.quantity)
@@ -46,17 +45,20 @@ export default {
                         return misc
                     })
                 }
+                
                 if (order.orderPizzas) {
-                    order.orderPizzas = order.orderPizzas.map(pizza => {
+                    orderPizzas = order.orderPizzas.map(pizza => {
                         let price = getPizzaPrice(rootState.PizzaConstructor, pizza)
                         totalPrice += (price * pizza.quantity)   
                         return {...pizza, price, productType: "pizza"}
                     })
                 }
+               
+                order.orderMisc = orderMisc 
+                order.orderPizzas = orderPizzas 
                 order.totalPrice = totalPrice
                 return order
             })
-            console.log("editedOrders", editedOrders)
             return editedOrders
         }
     },

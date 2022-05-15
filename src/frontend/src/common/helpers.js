@@ -22,25 +22,27 @@ export const setAuth = store => {
 
 
 export const getElemFromStore = (store, type, id) => {
-  console.log(store[type])
   return store[type].find(elem => elem.id == id)
 };
 
 
 export const getPizzaPrice = (store, pizza) => {
-
+  if(!store.sauces.length || !store.dough.length || !store.ingredients.length || !store.sizes.length){
+    return 0
+  }
   let totalPrice = 0
   if(!pizza){
     pizza = store.configuredPizza
   }
-  let ingredients =  pizza.ingredients.filter(ingredient => ingredient.quantity > 0)
+
   if(pizza.sauceId){
     totalPrice += store.sauces.find(sauce => sauce.id == pizza.sauceId).price
   }
   if(pizza.doughId){
     totalPrice += store.dough.find(dough => dough.id == pizza.doughId).price
   }
-  if(pizza.ingredients.length > 0){
+  if(pizza.ingredients){
+    let ingredients = pizza.ingredients.filter(ingredient => ingredient.quantity > 0)
     ingredients.forEach(pizzaIngredient => {
       totalPrice += store.ingredients.find(ingredient => ingredient.id == pizzaIngredient.ingredientId).price * pizzaIngredient.quantity
     })
@@ -48,13 +50,12 @@ export const getPizzaPrice = (store, pizza) => {
   if(pizza.sizeId){
     totalPrice *= store.sizes.find(size => size.id == pizza.sizeId).multiplier
   }
-  //todo сделать множитель 2х/3х
+  
   return totalPrice
 };
 
 
 export const getPizzaInfo = (product, state) => {
-  //let state = this.$store.state.PizzaConstructor
   let info = []
   if(product.sizeId){
     let size = getElemFromStore(state, "sizes", product.sizeId)
@@ -65,7 +66,7 @@ export const getPizzaInfo = (product, state) => {
   if(product.doughId){
     let dough = getElemFromStore(state, "dough", product.doughId)
     if(dough){
-      info.push(dough.description)
+      info.push(dough.description) // todo - Из твердых сортов пшеницы переделать на "на тонком/толстом" тесте
     }
   }
   return info.join(", ")
@@ -77,13 +78,14 @@ export const getPizzaSauce = (product, state) => {
 }
 
 export const getPizzaIngredients = (product, state) => {
-  let ingredients = product.ingredients.filter(ingredient => ingredient.quantity > 0)
-  let ingredientsList = ingredients.map(ingredient => getElemFromStore(state, "ingredients", ingredient.ingredientId).name).join(", ")
-  return (ingredientsList ? ingredientsList : "без начинки")
+  if(!state.ingredients.length){
+    return ""
+  }
+  let ingredientsList = "без начинки"
+  if(product.ingredients){
+    let ingredients = product.ingredients.filter(ingredient => ingredient.quantity > 0)
+    ingredientsList = ingredients.map(ingredient => getElemFromStore(state, "ingredients", ingredient.ingredientId).name).join(", ")
+  }
+  return ingredientsList
 }
 
-export const getMiscInfo = (state, product) => {
-  let ingredients = product.ingredients.filter(ingredient => ingredient.quantity > 0)
-  let ingredientsList = ingredients.map(ingredient => getElemFromStore(state, "misc", ingredient.ingredientId).name).join(", ")
-  return (ingredientsList ? ingredientsList : "без начинки")
-}

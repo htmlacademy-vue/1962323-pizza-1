@@ -8,15 +8,18 @@
 </template>
 <script>
 export default {
-    props:{
+    props: {
+
         value:{
             type: String,
             default: ""
         },
+
         options:{
             type: Array,
             default: () => {}
         },
+        
         name:{
             type: String,
             required: true

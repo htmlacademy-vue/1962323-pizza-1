@@ -1,10 +1,6 @@
 <template>
   <main class="layout">
     <div class="layout__sidebar sidebar">
-      <a href="index.html" class="logo layout__logo">
-        <img src="img/logo.svg" alt="V!U!E! Pizza logo" width="90" height="40">
-      </a>
-
       <router-link to="/orders" class="layout__link layout__link--active">История заказов</router-link>
       <router-link to="/profile" class="layout__link">Мои данные</router-link>
     </div>
@@ -17,7 +13,7 @@
       <section class="sheet order" v-for="order of ordersPrice" :key="order.id">
         <div class="order__wrapper">
           <div class="order__number">
-            <b>Заказ #11199929</b>
+            <b>Заказ #{{order.id}}</b>
           </div>
 
           <div class="order__sum">
@@ -60,7 +56,7 @@
           </li>
         </ul>
 
-        <p class="order__address">Адрес доставки: Тест (или если адрес новый - писать целиком)</p>
+        <p class="order__address">{{order.orderAddress ? order.orderAddress.name : ""}}</p>
       </section>
     </div>
   </main>
@@ -71,28 +67,21 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import { 
   getPizzaInfo, 
   getPizzaSauce, 
-  getPizzaIngredients,
-  getPizzaPrice
+  getPizzaIngredients
 } from '@/common/helpers';
 export default{
-    async created(){
-      await this.getOrders()
-    },
-    data(){
-      return {
-     
-      }
+    created(){
+      this.getOrders()
     },
     computed:{
        ...mapGetters("Orders", ["ordersPrice"]),
-       ...mapState("Orders", ["orders"]),
-        store(){
+        state(){
           return this.$store.state.PizzaConstructor
         }
     },
     methods:{
-        ...mapActions("Order", ["repeatOrder"]),
-        ...mapActions("Orders", ["deleteOrder"]),
+      ...mapActions("Order", ["repeatOrder"]),
+      ...mapActions("Orders", ["deleteOrder"]),
       repeatOrderHandle(order){
           this.repeatOrder(order)
           this.$router.push('/cart')
@@ -101,13 +90,13 @@ export default{
         return product.quantity > 1 ? product.quantity + "х" + product.price : product.price
       },
       getInfo(product){
-        return getPizzaInfo(product, this.store)
+        return getPizzaInfo(product, this.state)
       },
       getSauce(product){
-        return getPizzaSauce(product, this.store)
+        return getPizzaSauce(product, this.state)
       },
       getIngredients(product){
-        return getPizzaIngredients(product, this.store)
+        return getPizzaIngredients(product, this.state)
       },
       ...mapActions("Orders", ["getOrders"])
     },

@@ -12,7 +12,6 @@ import {
   SET_ENTITY 
 } from "@/store/mutation-types";
 
-import fulldata from '@/static/pizza.json'
 import { classes } from '@/static/consts.json'
 import { getPizzaPrice } from '@/common/helpers';
 export default {
@@ -22,7 +21,6 @@ export default {
     dough:[],
     ingredients:[],
     sizes:[],
-    ...fulldata,
     configuredPizza:{
       id: Math.floor(Math.random() * 100000) + 1 + "",
       productType: "pizza",
@@ -47,10 +45,6 @@ export default {
     setIngredientCount({commit}, data){
       commit(SET_INGREDIENT_COUNT, data)
     },
-    setClassToElems({commit}){
-      let types = ["dough", "sizes", "ingredients", "sauces"]
-      commit(SET_CLASS_TO_ELEMS, types)
-    },
     setPizzaName({commit}, name){
       commit(SET_NAME, name)
     },
@@ -58,12 +52,12 @@ export default {
       let product = {...state.configuredPizza, price: getters.totalPrice}
       commit('Order/' + ADD_PRODUCT_TO_CART, product, { root: true })
       commit(CLEAR_PIZZA_CONFIGURATION)
-      
     },
     changePizzaConfiguration({commit}, product){
       commit(CHANGE_PIZZA_CONFIGURATION, product)
     },
     async getPizzaData({commit}){
+      const types = ["dough", "sizes", "ingredients", "sauces"]
       const ingredients  = await this.$api.pizza.getIngredients()
       const sizes  = await this.$api.pizza.getSizes()
       const sauces  = await this.$api.pizza.getSauces()
@@ -86,6 +80,15 @@ export default {
       commit(
         SET_ENTITY,
         { module: 'PizzaConstructor', entity: 'dough', value: dough },
+        { root: true }
+      );
+      commit(SET_CLASS_TO_ELEMS, types)
+    },
+    async getMiscData({commit}){
+      const misc  = await this.$api.pizza.getMisc() //todo - возможно стоит создать отдельный класс в апи для misc
+      commit(
+        SET_ENTITY,
+        { module: 'Order', entity: 'cart', value: misc },
         { root: true }
       );
     }
