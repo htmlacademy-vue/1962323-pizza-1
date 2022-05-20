@@ -16,6 +16,7 @@ export const SET_ORDERS = "SET_ORDERS";
 export const REPEAT_ORDER = "REPEAT_ORDER";
 export const DELETE_ORDER = "DELETE_ORDER";
 export const ADD_NEW_ADDRESS = "ADD_NEW_ADDRESS";
+export const ADD_PHONE = "ADD_PHONE";
 export const DELETE_ADDRESS = "DELETE_ADDRESS";
 export const EDIT_ADDRESS = "EDIT_ADDRESS";
 export const GET_ADDRESSES = "GET_ADDRESSES";

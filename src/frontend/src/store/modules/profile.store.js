@@ -1,7 +1,6 @@
 import Vue from "vue";
 import {
     ADD_NEW_ADDRESS,
-    GET_ADDRESSES,
     DELETE_ADDRESS,
     EDIT_ADDRESS
 } from "@/store/mutation-types";
@@ -16,10 +15,6 @@ export default {
             let result = await this.$api.profile.addNewAddress(data)
             commit(ADD_NEW_ADDRESS, result)
         },
-        async getAddresses({commit}) {
-            let result = await this.$api.profile.getAddresses()
-            commit(GET_ADDRESSES, result)
-        },
         async deleteAddresses({commit}, addressId) {
             let result = await this.$api.profile.deleteAddresses(addressId)
             commit(DELETE_ADDRESS, addressId)
@@ -33,9 +28,6 @@ export default {
     mutations: {
         [ADD_NEW_ADDRESS](state, result) {
             state.addresses.push(result)
-        },
-        [GET_ADDRESSES](state, result) {
-            state.addresses = [...result]
         },
         [DELETE_ADDRESS](state, addressId) {
             state.addresses = state.addresses.filter(address => address.id != addressId)

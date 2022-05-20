@@ -4,31 +4,20 @@
     </component>
 </template>
 <script>
-  import {mapActions } from "vuex";
-  import { setAuth } from '@/common/helpers';
+  import {mapActions, mapState } from "vuex";
+
   const defaultLayout= "AppLayoutMain"
   export default {
     created() {
-       this.getMiscData()
-       this.getPizzaData()
-      if (this.$jwt.getToken()) {
-          setAuth(this.$store);
-           this.getAddresses()
-      }
-  //  this.$store.dispatch('init');
-  },
+        this.$store.dispatch('init');
+    },
     name: "App",
-      computed: {
+    computed: {
       layout() {
         const layout = this.$route.meta.layout || defaultLayout;
         return () => import(`@/layouts/${layout}.vue`);
       }
-    },
-    methods:{
-      ...mapActions("PizzaConstructor", ["getPizzaData", "getMiscData"]),
-      ...mapActions("Profile", ["getAddresses"])
     }
-
   };
 </script>
 

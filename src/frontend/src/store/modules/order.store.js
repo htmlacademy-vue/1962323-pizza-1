@@ -6,13 +6,14 @@ import {
     CHANGE_ADDRESS_INFO,
     SET_DEFAULT_QUANTITY_TO_PRODUCTS,
     REPEAT_ORDER,
+    ADD_PHONE
 } from "@/store/mutation-types";
 
 import additionalProducts from '@/static/misc.json'
 export default {
   namespaced: true,
   state: {
-    phone:"",
+    phone: "",
     //cart: [...additionalProducts],
     cart: [],
     address: {
@@ -49,14 +50,11 @@ export default {
         miscId: product.id,
         quantity: product.quantity
       }))
-      
+     
       let response = await this.$api.orders.createOrder(order)
       commit(HANDLE_ORDER)
     },
     changeProductQuantity({commit}, data){
-      if(data.quantity <= 0){
-        data.quantity = 1
-      }
       commit(CHANGE_PRODUCT_QUANTITY, data)
     },
     setAddressValue({commit}, data){
@@ -73,6 +71,9 @@ export default {
     },
     repeatOrder({commit}, order){
         commit(REPEAT_ORDER, order)
+    },
+    addPhone({commit}, value){
+      commit(ADD_PHONE, value)
     }
   },
   mutations: {
@@ -100,11 +101,7 @@ export default {
       if(!state.address){
         state.address = {}
       }
-      if(name == "phone"){
-        state[name] = value
-      }else{
-        state.address = {...state.address, [name]: value}
-      }
+      state.address = {...state.address, [name]: value}
     },
     [SET_DEFAULT_QUANTITY_TO_PRODUCTS](state){
       state.cart = state.cart.map(product => ({...product, quantity: product.quantity ? product.quantity : 0}))
@@ -113,6 +110,9 @@ export default {
         state.cart = [...order.orderPizzas, ...order.orderMisc]
         state.address = {...order.orderAddress}
         state.phone = order.phone
+    },
+    [ADD_PHONE](state, value){
+      state.phone = value
     }
   },
   getters:{
@@ -123,7 +123,7 @@ export default {
       return state.cart.filter(elem => elem.productType !== "pizza")
     },
     totalPrice(state){
-      return state.cart.reduce((current, product) => current + (product.price * product.quantity), 0);
+      return state.cart.reduce((current, product) => current + (product.price * (product.quantity ? product.quantity : 0)), 0);
     }
   },
 };

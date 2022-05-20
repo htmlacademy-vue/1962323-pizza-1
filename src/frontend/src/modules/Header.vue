@@ -47,14 +47,9 @@ import { logout } from '@/common/mixins';
 export default {
 mixins: [logout],
     computed:{
-        ...mapState("Auth", ["isAuthenticated", "user"]),
+        ...mapState("Auth", ["user"]),
+        ...mapGetters("Auth", ["isAuthenticated"]),
         ...mapGetters("Order", ["totalPrice"])
-    },
-    created(){
-        this.addCountToProductsInCart()
-    },
-    methods:{
-        ...mapActions("Order", ["addCountToProductsInCart"])
     }
 }
 </script>

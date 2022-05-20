@@ -38,23 +38,23 @@ export class PizzaService extends BaseApiService {
   constructor() {
     super();
   }
-  async getIngredients(params) {
+  async getIngredients() {
     const { data } = await axios.get('ingredients');
     return data
   }
-  async getSizes(params) {
+  async getSizes() {
     const { data } = await axios.get('sizes');
     return data
   }
-  async getSauces(params) {
+  async getSauces() {
     const { data } = await axios.get('sauces');
     return data
   }
-  async getDough(params) {
+  async getDough() {
     const { data } = await axios.get('dough');
     return data
   }
-  async getMisc(params) {
+  async getMisc() {
     const { data } = await axios.get('misc');
     return data
   }
@@ -68,7 +68,7 @@ export class OrderService extends BaseApiService {
     const { data } = await axios.post('orders', params);
     return data
   }
-  async getOrders(params) {
+  async getOrders() {
     const { data } = await axios.get('orders');
     return data
   }

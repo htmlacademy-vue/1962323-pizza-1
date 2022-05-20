@@ -10,7 +10,10 @@
             <div class="content__constructor">
                 <div :class="`pizza pizza--foundation--${getViewClass}`">
                 <div class="pizza__wrapper">
-                    <div :class="`pizza__filling pizza__filling--${ingredient.class}`" v-for="ingredient in choosenIngredients" :key="ingredient.id"></div>    
+                    <div :class="`pizza__filling pizza__filling--${ingredient.class}`" v-for="ingredient in choosenIngredients" :key="ingredient.id">
+                        <div :class="`pizza__filling pizza__filling--${ingredient.class} pizza__filling--second`" v-if="ingredient.quantity == 2"></div>   
+                        <div :class="`pizza__filling pizza__filling--${ingredient.class} pizza__filling--third`" v-if="ingredient.quantity == 3"></div> 
+                    </div>
                 </div>
                 </div>
             </div>
@@ -28,7 +31,6 @@ import TextInput from '@/common/components/TextInput'
 import AppDrop from '@/common/components/AppDrop'
 import { ingredientsCounter } from '@/static/consts.json'
 import { mapState, mapActions, mapGetters } from "vuex";
-import { getElemFromStore } from '@/common/helpers';
 export default {
     components:{
         TextInput,
@@ -54,14 +56,14 @@ export default {
         ingredientsCounter(){
             return ingredientsCounter
         },
-        ...mapGetters("PizzaConstructor", ["totalPrice", "ingredients"]),
+        ...mapGetters("PizzaConstructor", ["totalPrice", "ingredients", "getPizzaComponent"]),
         ...mapState("PizzaConstructor", ["configuredPizza"]),
         choosenIngredients(){
             return this.ingredients.filter(ingredient => ingredient.quantity && ingredient.quantity > 0)
         },
         getViewClass(){
-            let dough = getElemFromStore(this.$store.state.PizzaConstructor, "dough", this.configuredPizza.doughId)
-            let sauce = getElemFromStore(this.$store.state.PizzaConstructor, "sauces", this.configuredPizza.sauceId)
+            let dough = this.getPizzaComponent("dough", this.configuredPizza.doughId)
+            let sauce = this.getPizzaComponent("sauces", this.configuredPizza.sauceId)
             let doughClass = dough ? dough.class : 'large'
             let sauceClass = sauce ? sauce.class : 'creamy'
             return doughClass + "-" + sauceClass

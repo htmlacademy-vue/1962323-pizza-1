@@ -9,7 +9,6 @@ import {
   CLEAR_PIZZA_CONFIGURATION,
   ADD_PRODUCT_TO_CART,
   CHANGE_PIZZA_CONFIGURATION,
-  SET_ENTITY 
 } from "@/store/mutation-types";
 
 import { classes } from '@/static/consts.json'
@@ -24,9 +23,9 @@ export default {
     configuredPizza:{
       id: Math.floor(Math.random() * 100000) + 1 + "",
       productType: "pizza",
-      sauceId: null,
-      sizeId: null,
-      doughId: null,
+      sauceId: 2,
+      sizeId: 2,
+      doughId: 2,
       price: null,
       name: null,
       ingredients: []
@@ -56,42 +55,9 @@ export default {
     changePizzaConfiguration({commit}, product){
       commit(CHANGE_PIZZA_CONFIGURATION, product)
     },
-    async getPizzaData({commit}){
-      const types = ["dough", "sizes", "ingredients", "sauces"]
-      const ingredients  = await this.$api.pizza.getIngredients()
-      const sizes  = await this.$api.pizza.getSizes()
-      const sauces  = await this.$api.pizza.getSauces()
-      const dough  = await this.$api.pizza.getDough()
-      commit(
-        SET_ENTITY,
-        { module: 'PizzaConstructor', entity: 'ingredients', value: ingredients },
-        { root: true }
-      );
-      commit(
-        SET_ENTITY,
-        { module: 'PizzaConstructor', entity: 'sizes', value:sizes },
-        { root: true }
-      );
-      commit(
-        SET_ENTITY,
-        { module: 'PizzaConstructor', entity: 'sauces', value: sauces },
-        { root: true }
-      );
-      commit(
-        SET_ENTITY,
-        { module: 'PizzaConstructor', entity: 'dough', value: dough },
-        { root: true }
-      );
-      commit(SET_CLASS_TO_ELEMS, types)
-    },
-    async getMiscData({commit}){
-      const misc  = await this.$api.pizza.getMisc() //todo - возможно стоит создать отдельный класс в апи для misc
-      commit(
-        SET_ENTITY,
-        { module: 'Order', entity: 'cart', value: misc },
-        { root: true }
-      );
-    }
+    setClassesToElems({commit}, type){
+     commit(SET_CLASS_TO_ELEMS, type)
+   }
   },
   mutations: {
     [SET_NAME](state, name){
@@ -118,10 +84,10 @@ export default {
         Vue.delete(state.configuredPizza.ingredients, ingredientIndex)
       }
     },
-    [SET_CLASS_TO_ELEMS](state, types){
-        types.forEach(type=>{
-          state[type] = state[type].map( elem => ({...elem, class: classes[type][elem.id]}));  
-        })
+    [SET_CLASS_TO_ELEMS](state, type){
+      if(state[type].length){
+        state[type] = state[type].map( elem => ({...elem, class: classes[type][elem.id]}));  
+      }
     },
     [CLEAR_PIZZA_CONFIGURATION](state){
       //todo - разобраться с очищением текущего билда пиццы
@@ -137,13 +103,22 @@ export default {
   },
   getters:{
     totalPrice(state){
-      return getPizzaPrice(state)
+      return getPizzaPrice(
+        state.sauces,
+        state.dough,
+        state.ingredients,
+        state.sizes, 
+        state.configuredPizza
+      )
     },
     ingredients(state){
       return [...state.ingredients].map(ingredient => {
         let selectedIngredient = state.configuredPizza.ingredients.find(elem => elem.ingredientId == ingredient.id)
         return {...ingredient, quantity: selectedIngredient ? selectedIngredient.quantity : 0}
       })
+    },
+    getPizzaComponent: (state) => (type, id) => {
+      return state[type].find(elem => elem.id == id)
     }
   },
 };

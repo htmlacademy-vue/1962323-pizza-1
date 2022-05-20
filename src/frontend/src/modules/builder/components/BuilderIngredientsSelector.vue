@@ -12,7 +12,7 @@
                     name="sauce"
                     :key="sauce.id"
                     :value="sauce.id"
-                    :selected-value="configuredPizza.sauce ? configuredPizza.sauce.id : null"
+                    :selected-value="selectedValue"
                     @input="setSouce"
                     >
                     <span>{{sauce.name}}</span>
@@ -55,6 +55,9 @@ export default {
         AppDrag
     },
     computed:{
+        selectedValue(){
+            return this.configuredPizza.sauceId ? this.configuredPizza.sauceId : null
+        },
         ingredientsCounter(){
           return ingredientsCounter
         },

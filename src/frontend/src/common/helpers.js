@@ -6,6 +6,7 @@ import {
   OrderService,
   ProfileService
 } from '@/services/api.service';
+
 export const createResources = () => {
   return {
     [resources.AUTH]: new AuthApiService(),
@@ -22,35 +23,34 @@ export const setAuth = store => {
 
 
 export const getElemFromStore = (store, type, id) => {
+  if(!store[type]){
+    return
+  }
   return store[type].find(elem => elem.id == id)
 };
 
 
-export const getPizzaPrice = (store, pizza) => {
-  if(!store.sauces.length || !store.dough.length || !store.ingredients.length || !store.sizes.length){
+export const getPizzaPrice = (sauces, dough, ingredients, sizes, pizza) => {
+  if(!sauces.length || !dough.length || !ingredients.length || !sizes.length){
     return 0
   }
   let totalPrice = 0
-  if(!pizza){
-    pizza = store.configuredPizza
-  }
-
   if(pizza.sauceId){
-    totalPrice += store.sauces.find(sauce => sauce.id == pizza.sauceId).price
+    totalPrice += sauces.find(sauce => sauce.id == pizza.sauceId).price
   }
   if(pizza.doughId){
-    totalPrice += store.dough.find(dough => dough.id == pizza.doughId).price
+    totalPrice += dough.find(dough => dough.id == pizza.doughId).price
   }
+  
   if(pizza.ingredients){
-    let ingredients = pizza.ingredients.filter(ingredient => ingredient.quantity > 0)
-    ingredients.forEach(pizzaIngredient => {
-      totalPrice += store.ingredients.find(ingredient => ingredient.id == pizzaIngredient.ingredientId).price * pizzaIngredient.quantity
+    let selectedIngredients = pizza.ingredients.filter(ingredient => ingredient.quantity > 0)
+    selectedIngredients.forEach(pizzaIngredient => {
+      totalPrice += ingredients.find(ingredient => ingredient.id == pizzaIngredient.ingredientId).price * pizzaIngredient.quantity
     })
   }
   if(pizza.sizeId){
-    totalPrice *= store.sizes.find(size => size.id == pizza.sizeId).multiplier
+    totalPrice *= sizes.find(size => size.id == pizza.sizeId).multiplier
   }
-  
   return totalPrice
 };
 

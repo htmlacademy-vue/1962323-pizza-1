@@ -48,7 +48,15 @@ export default {
                 
                 if (order.orderPizzas) {
                     orderPizzas = order.orderPizzas.map(pizza => {
-                        let price = getPizzaPrice(rootState.PizzaConstructor, pizza)
+
+                        let price = getPizzaPrice(
+                            rootState.PizzaConstructor.sauces,
+                            rootState.PizzaConstructor.dough,
+                            rootState.PizzaConstructor.ingredients,
+                            rootState.PizzaConstructor.sizes,
+                            pizza
+                        )
+                        
                         totalPrice += (price * pizza.quantity)   
                         return {...pizza, price, productType: "pizza"}
                     })

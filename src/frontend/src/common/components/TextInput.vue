@@ -23,7 +23,7 @@ export default {
         },
 
         isDisabled:{
-             type: Boolean,
+            type: Boolean,
             default: false
         }
     }

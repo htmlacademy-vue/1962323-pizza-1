@@ -7,7 +7,6 @@
         name = "delivery"
         :options = "options"
         v-model="deliveryType"
-        @input = "handleDeliveryType"
       />
     </label>
 
@@ -17,7 +16,7 @@
           name="phone"
           place-holder="+7 999-999-99-99"
           :value = "phone"
-          @input = "handleInfo"
+          @input = "addPhone"
         />
     </label>
 
@@ -30,7 +29,7 @@
            <TextInput
             name="street"
             place-holder=""
-            :disabled="disabled"
+            :is-disabled="isDisabled"
             :value = "address ? address.street : ''"
             @input = "handleInfo"
            />
@@ -43,7 +42,7 @@
             <TextInput
             name="building"
             place-holder=""
-            :disabled="disabled"
+            :is-disabled="isDisabled"
             :value = "address ? address.building : ''"
             @input = "handleInfo"
            />
@@ -56,7 +55,7 @@
             <TextInput
               name="flat"
               place-holder=""
-              :disabled="disabled"
+              :is-disabled="isDisabled"
               :value = "address ? address.flat : ''"
               @input = "handleInfo"
             />
@@ -72,6 +71,7 @@
 import { mapState, mapGetters, mapActions } from "vuex";
 import TextInput from '@/common/components/TextInput'
 import SelectInput from '@/common/components/SelectInput'
+import deliveryOptions from '@/common/enums/deliveryOptions';
 
 export default {
     components:{
@@ -83,18 +83,20 @@ export default {
         deliveryType: "new_address"
       }
     },
+    watch:{
+      deliveryType(newValue, oldValue){
+        this.handleDeliveryType(newValue)
+      }
+    },
     computed:{
-        disabled(){
-            if(this.deliveryType != "new_address" && this.deliveryType != "new_address"){
+        isDisabled(){
+            if(this.deliveryType != "new_address" && this.deliveryType != "takeout"){
               return true
             }
             return false
         },
         options(){
-          let options = [
-            {value: "takeout", name: "Заберу сам"},
-            {value: "new_address", name: "Новый адрес"},
-          ]
+          let options = [...deliveryOptions]
           if(this.isAuthenticated){
             let addresses = this.$store.state.Profile.addresses
             addresses = addresses.map(address => ({value:address.id, name: address.name}))
@@ -103,14 +105,18 @@ export default {
           return options
 
         },
-        ...mapState("Auth", ["isAuthenticated"]),
+        ...mapGetters("Auth", ["isAuthenticated"]),
         ...mapGetters("Order", ["additionalProducts"]),
         ...mapState("Order", ["address", "phone"])
     },
     methods:{
-      ...mapActions("Order", ["setAddressValue", "setExistedAddress"]),
+      ...mapActions("Order", ["setAddressValue", "setExistedAddress", "addPhone"]),
       handleInfo(value, name){
-          this.setAddressValue({value, name})
+          if(name == "phone"){
+            this.addPhone(value)
+          }else{
+            this.setAddressValue({value, name})
+          }
       },
       handleDeliveryType(value){
         if(value == "takeout" || value == "new_address"){

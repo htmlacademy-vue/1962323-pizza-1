@@ -17,7 +17,6 @@ import DoughSelector from '@/modules/builder/components/BuilderDoughSelector'
 import IngredientsSelector from '@/modules/builder/components/BuilderIngredientsSelector'
 import SizeSelector from '@/modules/builder/components/BuilderSizeSelector'
 import PizzaView from '@/modules/builder/components/BuilderPizzaView'
-
 export default {
   components:{
     DoughSelector,
