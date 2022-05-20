@@ -7,7 +7,7 @@
               <div class="product__text">
                 <h2>{{product.name}}</h2>
                 <ul>
-                  <li>{{getPizzainfo(product)}}</li>
+                  <li>{{getInfo(product)}}</li>
                   <li>Соус: {{getSauce(product)}}</li>
                   <li>Начинка: {{getIngredients(product)}}</li>
                 </ul>
@@ -54,44 +54,44 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import ItemCounter from '@/common/components/ItemCounter'
-import consts from '@/static/consts.json'
+import { ingredientsCounter } from '@/static/consts.json'
 import router from '@/router'
+import { 
+  getPizzaInfo, 
+  getPizzaSauce, 
+  getPizzaIngredients 
+} from '@/common/helpers';
 export default {
     components:{
       ItemCounter
     },
     computed:{
-        ...mapGetters("Order", ["pizzaProducts", "additionalProducts"]),
+        ...mapGetters("Order", ["pizzaProducts","additionalProducts"]),
         ingredientsCounter(){
-          return consts.ingredientsCounter
+          return ingredientsCounter
+        },
+        store(){
+          return this.$store.state.PizzaConstructor
         }
     },
     methods:{
+      getInfo(product){
+        return getPizzaInfo(product, this.store)
+      },
+      getSauce(product){
+        return getPizzaSauce(product, this.store)
+      },
+      getIngredients(product){
+        return getPizzaIngredients(product, this.store)
+      },
       changePizza(product){
         this.changePizzaConfiguration(product)
         router.push("/")
       },
       ...mapActions("PizzaConstructor", ["changePizzaConfiguration"]),
-      ...mapActions("Order", ["changeProductQuantity"]),
-        getPizzainfo(product){
-            let info = []
-            if(product.size){
-                info.push(product.size.name)
-            }
-            if(product.dough){
-                info.push(product.dough.description)
-            }
-            return info.join(", ")
-        },
-        getSauce(product){
-            return product.sauce ? product.sauce.name : "без соуса"
-        },
-        getIngredients(product){
-            let ingredientsList = Object.keys(product.ingredients).map(key => product.ingredients[key].name).join(", ")
-            return (ingredientsList ? ingredientsList : "без начинки")
-        }
+      ...mapActions("Order", ["changeProductQuantity"])
     }
 }
 </script>

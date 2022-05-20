@@ -8,7 +8,7 @@
         </div>
         <p>Мы начали готовить Ваш заказ, скоро привезём его вам ;)</p>
         <div class="popup__button">
-            <router-link to="/" class="button">Отлично, я жду!</router-link>
+            <router-link to="/orders" class="button">Отлично, я жду!</router-link>
         </div>
     </div>
 </template>

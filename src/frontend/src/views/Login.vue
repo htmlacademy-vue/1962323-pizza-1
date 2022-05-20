@@ -11,16 +11,34 @@
       <div class="sign-form__input">
         <label class="input">
           <span>E-mail</span>
-          <input type="email" name="email" placeholder="example@mail.ru">
+          <input type="email" name="email" placeholder="example@mail.ru" v-model="email">
         </label>
       </div>
       <div class="sign-form__input">
         <label class="input">
           <span>Пароль</span>
-          <input type="password" name="pass" placeholder="***********">
+          <input type="password" name="pass" placeholder="***********" v-model="password">
         </label>
       </div>
-      <button type="submit" class="button">Авторизоваться</button>
+      <button type="button" class="button" @click="Authorize">Авторизоваться</button>
     </form>
   </div>
 </template>
+<script>
+import { mapActions } from 'vuex'
+export default{
+    data(){
+      return {
+        email: "",
+        password: ""
+      }
+    },
+    methods:{
+      ...mapActions("Auth", ["login"]),
+      async Authorize(){
+        await this.login({ email: this.email, password: this.password })
+        await this.$router.push('/');
+      } 
+    }
+}
+</script>

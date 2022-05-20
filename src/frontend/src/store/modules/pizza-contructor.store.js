@@ -8,27 +8,28 @@ import {
   SET_NAME,
   CLEAR_PIZZA_CONFIGURATION,
   ADD_PRODUCT_TO_CART,
-  CHANGE_PIZZA_CONFIGURATION
+  CHANGE_PIZZA_CONFIGURATION,
 } from "@/store/mutation-types";
 
-import fulldata from '@/static/pizza.json'
-import consts from '@/static/consts.json'
+import { classes } from '@/static/consts.json'
+import { getPizzaPrice } from '@/common/helpers';
 export default {
   namespaced: true,
   state: {
-    ...fulldata,
+    sauces:[],
+    dough:[],
+    ingredients:[],
+    sizes:[],
     configuredPizza:{
       id: Math.floor(Math.random() * 100000) + 1 + "",
       productType: "pizza",
-      sauce: null,
-      size: null,
-      dough: null,
+      sauceId: 2,
+      sizeId: 2,
+      doughId: 2,
       price: null,
       name: null,
-      ingredients: {},
-      priceData: {},
-    },
-    priceMultiplier: 1,
+      ingredients: []
+    }
   },
   actions:{
     setDough({commit}, id){
@@ -43,10 +44,6 @@ export default {
     setIngredientCount({commit}, data){
       commit(SET_INGREDIENT_COUNT, data)
     },
-    setClassToElems({commit}){
-      let types = ["dough", "sizes", "ingredients", "sauces"]
-      commit(SET_CLASS_TO_ELEMS, types)
-    },
     setPizzaName({commit}, name){
       commit(SET_NAME, name)
     },
@@ -54,51 +51,50 @@ export default {
       let product = {...state.configuredPizza, price: getters.totalPrice}
       commit('Order/' + ADD_PRODUCT_TO_CART, product, { root: true })
       commit(CLEAR_PIZZA_CONFIGURATION)
-      
     },
     changePizzaConfiguration({commit}, product){
       commit(CHANGE_PIZZA_CONFIGURATION, product)
     },
+    setClassesToElems({commit}, type){
+     commit(SET_CLASS_TO_ELEMS, type)
+   }
   },
   mutations: {
     [SET_NAME](state, name){
       state.configuredPizza.name = name
     },
     [SET_DOUGH](state, id){
-      let dough = state.dough.find(elem => elem.id == id)
-      state.configuredPizza.dough = {...dough, class: dough.class == "large" ? "big" : "small"} 
-      state.configuredPizza.priceData = {...state.configuredPizza.priceData, 'dough': dough.price}
+      state.configuredPizza.doughId = id
     },
     [SET_SOUCE](state, id){
-        let sauce = state.sauces.find(elem => elem.id == id)
-        state.configuredPizza.sauce = {...sauce}
-        state.configuredPizza.priceData = {...state.configuredPizza.priceData, 'sauce': sauce.price}
+        state.configuredPizza.sauceId = id
     },
     [SET_SIZE](state, id){
-      let size = state.sizes.find(elem => elem.id == id)
-      state.priceMultiplier = size.multiplier
-      state.configuredPizza.size = {...size}
+      state.configuredPizza.sizeId = id
     },
-    [SET_INGREDIENT_COUNT](state, {id, count}){
-      let ingredient = state.ingredients.find(elem => elem.id == id) 
-      state.configuredPizza.ingredients = {...state.configuredPizza.ingredients, [ingredient.id]: {...ingredient, count}}
-      if(count == 0){
-        Vue.delete(state.configuredPizza.ingredients, ingredient.id)
+    [SET_INGREDIENT_COUNT](state, {id, quantity}){
+      let ingredient = {ingredientId: id, quantity}
+      let ingredientIndex = state.configuredPizza.ingredients.findIndex(elem => elem.ingredientId == id) 
+      if(ingredientIndex != -1){
+        Vue.set(state.configuredPizza.ingredients, ingredientIndex, ingredient)
+      }else{
+        state.configuredPizza.ingredients.push(ingredient)
       }
-      state.configuredPizza.priceData = {...state.configuredPizza.priceData, [`ingridient_${id}`]: state.ingredients.find(elem => elem.id == id).price * count}
+      if(quantity == 0 && ingredientIndex != -1){
+        Vue.delete(state.configuredPizza.ingredients, ingredientIndex)
+      }
     },
-    [SET_CLASS_TO_ELEMS](state, types){
-        types.forEach(type=>{
-          state[type] = state[type].map( elem => ({...elem, class: consts.classes[type][elem.id]}));  
-        })
+    [SET_CLASS_TO_ELEMS](state, type){
+      if(state[type].length){
+        state[type] = state[type].map( elem => ({...elem, class: classes[type][elem.id]}));  
+      }
     },
     [CLEAR_PIZZA_CONFIGURATION](state){
       //todo - разобраться с очищением текущего билда пиццы
       state.configuredPizza = {
         id: Math.floor(Math.random() * 10000000) + 1  + "",
         productType: "pizza",
-        ingredients: {},
-        priceData: {}
+        ingredients: [],
       }
     },
     [CHANGE_PIZZA_CONFIGURATION](state, product){
@@ -107,13 +103,22 @@ export default {
   },
   getters:{
     totalPrice(state){
-      return Object.values(state.configuredPizza.priceData).reduce((current, key) => current + key, 0) * state.priceMultiplier;
+      return getPizzaPrice(
+        state.sauces,
+        state.dough,
+        state.ingredients,
+        state.sizes, 
+        state.configuredPizza
+      )
     },
     ingredients(state){
       return [...state.ingredients].map(ingredient => {
-        let selectedIngredient = state.configuredPizza.ingredients ? state.configuredPizza.ingredients[ingredient.id] : null
-        return {...ingredient, count: selectedIngredient ? selectedIngredient.count : 0}
+        let selectedIngredient = state.configuredPizza.ingredients.find(elem => elem.ingredientId == ingredient.id)
+        return {...ingredient, quantity: selectedIngredient ? selectedIngredient.quantity : 0}
       })
+    },
+    getPizzaComponent: (state) => (type, id) => {
+      return state[type].find(elem => elem.id == id)
     }
   },
 };

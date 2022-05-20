@@ -11,7 +11,7 @@
                     :key="size.id"
                     :value="size.id" 
                     @input="setSize"
-                    :selectedValue="configuredPizza.size ? configuredPizza.size.id : null"
+                    :selected-value="selectedValue"
                     >
                     <span>{{size.name}}</span>
                 </RadioButton>
@@ -23,10 +23,13 @@
 import RadioButton from '@/common/components/RadioButton'
 import { mapState, mapActions } from "vuex";
 export default {
-     components:{
+    components:{
         RadioButton
     },
     computed:{
+        selectedValue(){
+            return this.configuredPizza.sizeId ? this.configuredPizza.sizeId : null
+        },
         ...mapState("PizzaConstructor", ["sizes", "configuredPizza"])
     },
     methods:{

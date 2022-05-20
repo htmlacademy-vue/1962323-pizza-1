@@ -12,7 +12,7 @@
                     name="sauce"
                     :key="sauce.id"
                     :value="sauce.id"
-                    :selectedValue="configuredPizza.sauce ? configuredPizza.sauce.id : null"
+                    :selected-value="selectedValue"
                     @input="setSouce"
                     >
                     <span>{{sauce.name}}</span>
@@ -24,14 +24,14 @@
                     <li class="ingredients__item" v-for="ingredient of ingredients" :key="ingredient.id">
                         <AppDrag 
                             :transfer-data="ingredient"
-                            :ingredientsCounter="ingredientsCounter"
-                            :isDraggable="draggableChecking(ingredient)">
+                            :ingredients-counter="ingredientsCounter"
+                            :is-draggable="draggableChecking(ingredient)">
                             <span :class="`filling filling--${ingredient.class}`">{{ingredient.name}}</span>
                         </AppDrag>
                         <ItemCounter 
                             :product="ingredient"
                             :range="ingredientsCounter"
-                             counterClass="counter--orange ingredients__counter"
+                            counter-class="counter--orange ingredients__counter"
                             @counterHandler="setIngredientCount"
                         />
                     </li>
@@ -46,7 +46,7 @@
 import ItemCounter from '@/common/components/ItemCounter'
 import RadioButton from '@/common/components/RadioButton'
 import AppDrag from '@/common/components/AppDrag'
-import consts from '@/static/consts.json'
+import { ingredientsCounter } from '@/static/consts.json'
 import { mapState, mapActions, mapGetters } from "vuex";
 export default {
     components:{
@@ -55,15 +55,18 @@ export default {
         AppDrag
     },
     computed:{
+        selectedValue(){
+            return this.configuredPizza.sauceId ? this.configuredPizza.sauceId : null
+        },
         ingredientsCounter(){
-          return consts.ingredientsCounter
+          return ingredientsCounter
         },
         ...mapGetters("PizzaConstructor", ["ingredients"]),
         ...mapState("PizzaConstructor", ["sauces", "configuredPizza"])
     },
     methods:{
         draggableChecking(indgredient){
-             if(!indgredient.count || indgredient.count < this.ingredientsCounter.max){
+             if(!indgredient.quantity || indgredient.quantity < this.ingredientsCounter.max){
                 return true
             }
             return false

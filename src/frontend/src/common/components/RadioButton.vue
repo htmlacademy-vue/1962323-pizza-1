@@ -6,23 +6,27 @@
 </template>
 <script>
 export default {
-   props:{
+   props: {
         name:{
             type:String,
             required:true
         },
+        
         inputClass:{
             type:String,
             default: ""
         },
+
         labelClass:{
             type:String,
             default: ""
         },
+
         selectedValue:{
             type: [String, Number],
             default: ""
         },
+        
         value:{
             type: [String, Number],
             required: true
