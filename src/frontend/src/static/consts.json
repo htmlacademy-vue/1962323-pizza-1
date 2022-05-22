@@ -34,5 +34,13 @@
       "1": "tomato",
       "2": "creamy"
     }
+  },
+  "defaultPizzaValues":{
+    "productType": "pizza",
+    "sauceId": 2,
+    "sizeId": 2,
+    "doughId": 2,
+    "price": null,
+    "name": null
   }
 }

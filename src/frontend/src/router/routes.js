@@ -35,13 +35,15 @@ export default [
         name: 'Login',
         component: () => import('../views/Login.vue'),
         meta: { 
-            layout: 'AppLayoutLogout',
-            middlewares: [isLoggedIn] }
+            layout: 'AppLayoutWithoutHeader',
+            middlewares: [isLoggedIn],
+            transition: 'none' 
+        }
     },
     {
         path: '/success',
         name: 'Popup',
         component: () => import('../views/Popup.vue'),
-        meta: { layout: 'AppLayoutLogout' }
+        meta: { layout: 'AppLayoutWithoutHeader', transition: 'fade'   }
     }
 ];

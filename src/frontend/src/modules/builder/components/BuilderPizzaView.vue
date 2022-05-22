@@ -9,12 +9,21 @@
         <AppDrop @drop="moveTask">
             <div class="content__constructor">
                 <div :class="`pizza pizza--foundation--${getViewClass}`">
-                <div class="pizza__wrapper">
-                    <div :class="`pizza__filling pizza__filling--${ingredient.class}`" v-for="ingredient in choosenIngredients" :key="ingredient.id">
-                        <div :class="`pizza__filling pizza__filling--${ingredient.class} pizza__filling--second`" v-if="ingredient.quantity == 2"></div>   
-                        <div :class="`pizza__filling pizza__filling--${ingredient.class} pizza__filling--third`" v-if="ingredient.quantity == 3"></div> 
+                    <div class="pizza__wrapper">
+                        <transition-group name="fade">
+                            <div v-for="ingredient in choosenIngredients" :key="ingredient.id">
+                                <transition name="fade">
+                                    <div :class="`pizza__filling pizza__filling--${ingredient.class}`"  v-show="ingredient.quantity >= 1"></div>
+                                </transition>
+                                <transition name="fade">
+                                    <div :class="`pizza__filling pizza__filling--${ingredient.class} pizza__filling--second`" v-show="ingredient.quantity >= 2"></div>  
+                                </transition> 
+                                <transition name="fade">
+                                    <div :class="`pizza__filling pizza__filling--${ingredient.class} pizza__filling--third`" v-show="ingredient.quantity >= 3"></div> 
+                                </transition> 
+                            </div>
+                        </transition-group>
                     </div>
-                </div>
                 </div>
             </div>
         </AppDrop>
@@ -72,3 +81,11 @@ export default {
 }
 </script>
 
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+  opacity: 0;
+}
+</style>
