@@ -11,7 +11,7 @@ import {
   CHANGE_PIZZA_CONFIGURATION,
 } from "@/store/mutation-types";
 
-import { classes } from '@/static/consts.json'
+import { classes, defaultPizzaValues } from '@/static/consts.json'
 import { getPizzaPrice } from '@/common/helpers';
 export default {
   namespaced: true,
@@ -21,14 +21,9 @@ export default {
     ingredients:[],
     sizes:[],
     configuredPizza:{
-      id: Math.floor(Math.random() * 100000) + 1 + "",
-      productType: "pizza",
-      sauceId: 2,
-      sizeId: 2,
-      doughId: 2,
-      price: null,
-      name: null,
-      ingredients: []
+      id: Math.floor(Math.random() * 100000),
+      ingredients: [],
+      ...defaultPizzaValues
     }
   },
   actions:{
@@ -92,9 +87,9 @@ export default {
     [CLEAR_PIZZA_CONFIGURATION](state){
       //todo - разобраться с очищением текущего билда пиццы
       state.configuredPizza = {
-        id: Math.floor(Math.random() * 10000000) + 1  + "",
-        productType: "pizza",
+        id: Math.floor(Math.random() * 100000),
         ingredients: [],
+        ...defaultPizzaValues
       }
     },
     [CHANGE_PIZZA_CONFIGURATION](state, product){
