@@ -18,10 +18,12 @@ export default {
       type: Object,
       required: true
     },
+
     ingredientsCounter:{
         type: Object,
         required: true
     },
+    
     isDraggable:{
         type: Boolean,
         required: false

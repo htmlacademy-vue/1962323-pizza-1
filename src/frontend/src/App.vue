@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header v-show="isHeader" />
+    <TheHeader v-show="isHeader" />
     <transition :name="$route.meta.transition || 'slide'" >
       <component :is="layout" >
           <router-view />
@@ -10,10 +10,10 @@
 </template>
 
 <script>
-  import Header from '@/modules/Header'
+  import TheHeader from '@/modules/TheHeader'
   const defaultLayout= "AppLayoutMain"
   export default {
-    components:{ Header },
+    components:{ TheHeader },
     created() {
         this.$store.dispatch('init');
     },

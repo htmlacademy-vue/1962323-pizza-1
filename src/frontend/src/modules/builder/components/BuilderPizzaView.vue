@@ -35,7 +35,6 @@
 </template>
 
 <script>
-//import BuilderPriceCounter from '@/modules/builder/components/BuilderPriceCounter'
 import TextInput from '@/common/components/TextInput'
 import AppDrop from '@/common/components/AppDrop'
 import { ingredientsCounter } from '@/static/consts.json'
