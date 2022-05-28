@@ -3,19 +3,19 @@ export default [
     {
         path: '/',
         name: 'Index',
-        component: () => import('../views/Index.vue'),
+        component: () => import('../views/TheIndex.vue'),
         meta: { layout: 'AppLayoutMain' }
     },
     {
         path: '/cart',
         name: 'Cart',
-        component: () => import('../views/Cart.vue'),
+        component: () => import('../views/TheCart.vue'),
         meta: { layout: 'AppLayoutMain' }
     },
     {
         path: '/profile',
         name: 'Profile',
-        component: () => import('../views/Profile.vue'),
+        component: () => import('../views/TheProfile.vue'),
         meta: { 
             layout: 'AppLayoutMain',
             middlewares: [auth]  
@@ -24,7 +24,7 @@ export default [
     {
         path: '/orders',
         name: 'Orders',
-        component: () => import('../views/Orders.vue'),
+        component: () => import('../views/TheOrders.vue'),
         meta: {
             layout: 'AppLayoutMain', 
             middlewares: [auth] 
@@ -33,7 +33,7 @@ export default [
     {
         path: '/login',
         name: 'Login',
-        component: () => import('../views/Login.vue'),
+        component: () => import('../views/TheLogin.vue'),
         meta: { 
             layout: 'AppLayoutWithoutHeader',
             middlewares: [isLoggedIn],
@@ -43,7 +43,10 @@ export default [
     {
         path: '/success',
         name: 'Popup',
-        component: () => import('../views/Popup.vue'),
-        meta: { layout: 'AppLayoutWithoutHeader', transition: 'fade'   }
+        component: () => import('../views/ThePopup.vue'),
+        meta: { 
+            layout: 'AppLayoutWithoutHeader', 
+            transition: 'fade'   
+        }
     }
 ];
