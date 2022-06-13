@@ -1,56 +1,57 @@
 <template>
   <div>
-    <Header v-show="isHeader" />
-    <transition :name="$route.meta.transition || 'slide'" >
-      <component :is="layout" >
-          <router-view />
-      </component> 
+    <TheHeader v-show="isHeader" />
+    <transition :name="$route.meta.transition || 'slide'">
+      <component :is="layout">
+        <router-view />
+      </component>
     </transition>
   </div>
 </template>
 
 <script>
-  import Header from '@/modules/Header'
-  const defaultLayout= "AppLayoutMain"
-  export default {
-    components:{ Header },
-    created() {
-        this.$store.dispatch('init');
+import TheHeader from "@/modules/TheHeader";
+const defaultLayout = "AppLayoutMain";
+export default {
+  name: "App",
+  components: { TheHeader },
+
+  created() {
+    this.$store.dispatch("init");
+  },
+
+  computed: {
+    isHeader() {
+      return this.$route.meta.layout == defaultLayout;
     },
-    name: "App",
-    computed: {
-      isHeader(){
-        return this.$route.meta.layout == defaultLayout
-      },
-      layout() {
-        const layout = this.$route.meta.layout || defaultLayout;
-        return () => import(`@/layouts/${layout}.vue`);
-      }
-    }
-  };
+
+    layout() {
+      const layout = this.$route.meta.layout || defaultLayout;
+      return () => import(`@/layouts/${layout}.vue`);
+    },
+  },
+};
 </script>
 
-
 <style lang="scss">
-  @import "~@/assets/scss/app";
-  
+@import "~@/assets/scss/app";
+
 .slide-enter-active {
-  transition: all 0.4s
+  transition: all 0.4s;
 }
 .slide-enter {
- 
   margin-left: 100%;
 }
 .slide-leave-active {
   transition: all 0.4s;
   margin-left: -100%;
 }
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active до версии 2.1.8 */ {
   transition: opacity 0s;
   opacity: 0;
-  
 }
 </style>
