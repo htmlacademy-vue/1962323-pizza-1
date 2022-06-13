@@ -1,2 +1,2 @@
-import logout from '@/common/mixins/logout';
+import logout from "@/common/mixins/logout";
 export { logout };

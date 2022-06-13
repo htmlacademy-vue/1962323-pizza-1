@@ -1,12 +1,12 @@
-import { mount } from '@vue/test-utils';
-import BuilderDoughSelector from '@/modules/builder/components/BuilderDoughSelector';
-import { generateMockStore } from '@/store/mocks';
+import { mount } from "@vue/test-utils";
+import BuilderDoughSelector from "@/modules/builder/components/BuilderDoughSelector";
+import { generateMockStore } from "@/store/mocks";
 
-describe('BuilderDoughSelector', () => {
+describe("BuilderDoughSelector", () => {
   let wrapper;
   let store;
 
-  const createComponent = options => {
+  const createComponent = (options) => {
     wrapper = mount(BuilderDoughSelector, options);
   };
 
@@ -14,9 +14,8 @@ describe('BuilderDoughSelector', () => {
     store = generateMockStore();
   });
 
-  it('component rendered', () => {
-    createComponent({store});
+  it("component rendered", () => {
+    createComponent({ store });
     expect(wrapper.exists()).toBeTruthy();
   });
-
 });
