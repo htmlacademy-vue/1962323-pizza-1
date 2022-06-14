@@ -1,21 +1,17 @@
-
-
-import { 
-  SET_ENTITY
-} from "@/store/mutation-types";
+import { SET_ENTITY } from "@/store/mutation-types";
 
 export default {
   namespaced: true,
   state: {
-    user: null
+    user: null,
   },
 
   actions: {
-    async login({ commit, dispatch }, credentials) {
+    async login({ dispatch }, credentials) {
       const data = await this.$api.auth.login(credentials);
       this.$jwt.saveToken(data.token);
       this.$api.auth.setAuthHeader();
-      dispatch('getMe');
+      dispatch("getMe");
     },
 
     async logout({ commit }, sendRequest = true) {
@@ -26,30 +22,30 @@ export default {
       this.$api.auth.setAuthHeader();
       commit(
         SET_ENTITY,
-        { module: 'Auth', entity: 'user', value: null },
+        { module: "Auth", entity: "user", value: null },
         { root: true }
       );
     },
 
-    async getMe({ commit, dispatch, state }) {
+    async getMe({ commit, dispatch }) {
       try {
         const data = await this.$api.auth.getMe();
         commit(
           SET_ENTITY,
-          { module: 'Auth', entity: 'user', value: data },
+          { module: "Auth", entity: "user", value: data },
           { root: true }
         );
       } catch {
-        dispatch('logout', false);
+        dispatch("logout", false);
       }
-    }
+    },
   },
-  getters:{
-    isAuthenticated(state){
-      if(state.user){
-        return true
+  getters: {
+    isAuthenticated(state) {
+      if (state.user) {
+        return true;
       }
-      return false
-    }
-  }
+      return false;
+    },
+  },
 };

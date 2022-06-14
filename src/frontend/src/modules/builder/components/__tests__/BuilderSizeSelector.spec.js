@@ -1,12 +1,12 @@
-import { mount } from '@vue/test-utils';
-import BuilderSizeSelector from '@/modules/builder/components/BuilderSizeSelector';
-import { generateMockStore } from '@/store/mocks';
+import { mount } from "@vue/test-utils";
+import BuilderSizeSelector from "@/modules/builder/components/BuilderSizeSelector";
+import { generateMockStore } from "@/store/mocks";
 
-describe('BuilderSizeSelector', () => {
+describe("BuilderSizeSelector", () => {
   let wrapper;
   let store;
 
-  const createComponent = options => {
+  const createComponent = (options) => {
     wrapper = mount(BuilderSizeSelector, options);
   };
 
@@ -14,9 +14,8 @@ describe('BuilderSizeSelector', () => {
     store = generateMockStore();
   });
 
-  it('component rendered', () => {
-    createComponent({store});
+  it("component rendered", () => {
+    createComponent({ store });
     expect(wrapper.exists()).toBeTruthy();
   });
-
 });
